@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
+import 'screens/onboarding_screen.dart';
 
-void main() => runApp(FocusWalletApp());
+void main() {
+  runApp(FocusWalletApp());
+}
 
 class FocusWalletApp extends StatelessWidget {
+  const FocusWalletApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'FocusWallet',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.indigo,
+        fontFamily: 'Inter',
       ),
-      home: Scaffold(
-        body: Center(child: Text('¡Hola FocusWallet!')),
-      ),
+      home: OnboardingScreen(),
     );
   }
 }
