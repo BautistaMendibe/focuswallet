@@ -60,7 +60,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 // Botón blanco (Crear cuenta)
                 ElevatedButton(
                   onPressed: () {
-                    // ir a pantalla de registro
+                    Navigator.pushNamed(context, '/register');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
@@ -76,7 +76,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 // Botón negro (Iniciar sesión)
                 ElevatedButton(
                   onPressed: () {
-                    // ir a login
+                    Navigator.pushNamed(context, '/login');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,

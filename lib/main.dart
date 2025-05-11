@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:focuswallet/routes/app_routes.dart';
 import 'screens/onboarding_screen.dart';
 
 void main() {
@@ -18,6 +19,7 @@ class FocusWalletApp extends StatelessWidget {
         fontFamily: 'Inter',
       ),
       home: OnboardingScreen(),
+      routes: appRoutes,
     );
   }
 }
