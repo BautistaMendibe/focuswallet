@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "218327903975",
+    "project_id": "timewallet-9067e",
+    "storage_bucket": "timewallet-9067e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:218327903975:android:12385d94c0c10593a4bc42",
+        "android_client_info": {
+          "package_name": "com.example.focuswallet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsBUJE6oay06JPVmjpWtboENu6HblSFHg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,8 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:focuswallet/routes/app_routes.dart';
-import 'screens/onboarding_screen.dart';
+import 'package:focuswallet/screens/start_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(FocusWalletApp());
 }
 
@@ -18,7 +21,7 @@ class FocusWalletApp extends StatelessWidget {
         primarySwatch: Colors.indigo,
         fontFamily: 'Inter',
       ),
-      home: OnboardingScreen(),
+      home: const StartScreen(),
       routes: appRoutes,
     );
   }

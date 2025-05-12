@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -59,7 +60,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               children: [
                 // Botón blanco (Crear cuenta)
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setBool('seenOnboarding', true);
+                    if (!context.mounted) return;
                     Navigator.pushNamed(context, '/register');
                   },
                   style: ElevatedButton.styleFrom(
@@ -75,7 +79,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 const SizedBox(height: 10),
                 // Botón negro (Iniciar sesión)
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setBool('seenOnboarding', true);
+                    if (!context.mounted) return;
+
                     Navigator.pushNamed(context, '/login');
                   },
                   style: ElevatedButton.styleFrom(
