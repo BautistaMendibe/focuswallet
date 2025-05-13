@@ -12,27 +12,30 @@ class StartScreen extends StatefulWidget {
 
 class _StartScreenState extends State<StartScreen> {
   bool _loading = true;
-  bool _seenOnboarding = false;
-  User? _user;
 
   @override
   void initState() {
     super.initState();
-    _checkOnboarding();
+    _handleStartupLogic();
   }
 
-  Future<void> _checkOnboarding() async {
+  Future<void> _handleStartupLogic() async {
     final prefs = await SharedPreferences.getInstance();
     final seen = prefs.getBool('seenOnboarding') ?? false;
     final user = FirebaseAuth.instance.currentUser;
 
     if (!mounted) return;
 
-    setState(() {
-      _seenOnboarding = seen;
-      _user = user;
-      _loading = false;
-    });
+    // Redirige según corresponda
+    if (user != null) {
+      Navigator.pushReplacementNamed(context, '/dashboard');
+    } else if (seen) {
+      Navigator.pushReplacementNamed(context, '/login');
+    } else {
+      setState(() {
+        _loading = false;
+      });
+    }
   }
 
   @override
@@ -43,20 +46,7 @@ class _StartScreenState extends State<StartScreen> {
       );
     }
 
-    if (_user != null) {
-      Future.microtask(
-        () => Navigator.pushReplacementNamed(context, '/dashboard'),
-      );
-      return const SizedBox();
-    }
-
-    if (_seenOnboarding) {
-      Future.microtask(
-        () => Navigator.pushReplacementNamed(context, '/login'),
-      );
-      return const SizedBox();
-    }
-
+    // Si no vio el onboarding, se muestra la pantalla
     return const OnboardingScreen();
   }
 }

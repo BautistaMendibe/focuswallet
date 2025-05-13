@@ -17,10 +17,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void register() async {
     try {
       final user = await _authService.register(emailCtrl.text, passCtrl.text);
+      if (!mounted) return;
+
       if (user != null) {
         Navigator.pushReplacementNamed(context, '/dashboard');
       }
     } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+
       String errorMsg;
       switch (e.code) {
         case 'email-already-in-use':
@@ -46,6 +50,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       );
     } catch (e) {
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error desconocido: ${e.toString()}'),
