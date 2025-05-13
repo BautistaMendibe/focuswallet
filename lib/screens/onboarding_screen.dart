@@ -41,7 +41,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ],
           ),
           Positioned(
-            bottom: 100,
+            bottom: 10,
             left: 0,
             right: 0,
             child: Center(
@@ -53,7 +53,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
           Positioned(
-            bottom: 40,
+            bottom: 50,
             left: 20,
             right: 20,
             child: Column(
@@ -127,8 +127,8 @@ class OnboardingPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(image, height: 350),
-          SizedBox(height: 40),
+          Image.asset(image, height: 320),
+          SizedBox(height: 20),
           Text(title.toUpperCase(),
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
