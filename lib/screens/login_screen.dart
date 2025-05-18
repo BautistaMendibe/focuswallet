@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -26,22 +27,24 @@ class _LoginScreenState extends State<LoginScreen> {
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
 
+      final loc = AppLocalizations.of(context)!;
+
       String errorMsg;
       switch (e.code) {
         case 'user-not-found':
-          errorMsg = 'No hay usuario con ese correo.';
+          errorMsg = loc.auth_user_not_found;
           break;
         case 'wrong-password':
-          errorMsg = 'Contraseña incorrecta.';
+          errorMsg = loc.auth_wrong_password;
           break;
         case 'invalid-email':
-          errorMsg = 'El correo ingresado no es válido.';
+          errorMsg = loc.auth_invalid_email;
           break;
         case 'user-disabled':
-          errorMsg = 'Este usuario ha sido deshabilitado.';
+          errorMsg = loc.auth_user_disabled;
           break;
         default:
-          errorMsg = 'Error inesperado. Intenta nuevamente.';
+          errorMsg = loc.auth_default_error;
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -56,9 +59,11 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       if (!mounted) return;
 
+      final loc = AppLocalizations.of(context)!;
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error desconocido: ${e.toString()}'),
+          content: Text(loc.unknownError(e.toString())),
           backgroundColor: Colors.red.shade400,
         ),
       );
@@ -76,6 +81,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF9F9FE),
       body: SafeArea(
@@ -95,18 +102,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Icon(Icons.lock_outline, color: Colors.blue, size: 40),
                 ),
                 const SizedBox(height: 24),
-                const Text("Iniciar sesión",
-                    style: TextStyle(
-                        fontSize: 24, fontWeight: FontWeight.bold)),
+                Text(
+                  loc.login,
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 4),
-                const Text("Accede a tu cuenta",
-                    style: TextStyle(color: Colors.grey)),
+                Text(
+                  loc.loginSubtitle,
+                  style: const TextStyle(color: Colors.grey),
+                ),
                 const SizedBox(height: 24),
 
                 // Email
                 TextField(
                   controller: emailCtrl,
-                  decoration: customInputDecoration('Email'),
+                  decoration: customInputDecoration(loc.emailLabel),
                 ),
                 const SizedBox(height: 16),
 
@@ -114,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextField(
                   controller: passCtrl,
                   obscureText: _obscurePass,
-                  decoration: customInputDecoration('Contraseña').copyWith(
+                  decoration: customInputDecoration(loc.passwordLabel).copyWith(
                     suffixIcon: IconButton(
                       icon: Icon(_obscurePass
                           ? Icons.visibility_off
@@ -141,20 +151,25 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: const Text("Iniciar sesión",
-                        style: TextStyle(fontSize: 16, color: Colors.white)),
+                    child: Text(
+                      loc.login,
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("¿No tienes cuenta?"),
+                    Text(loc.noAccount),
                     TextButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/register');
                       },
-                      child: const Text("Registrarse", style: TextStyle(color: Color(0xFF007BFF)),),
+                      child: Text(
+                        loc.register,
+                        style: const TextStyle(color: Color(0xFF007BFF)),
+                      ),
                     ),
                   ],
                 )

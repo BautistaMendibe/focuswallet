@@ -1,0 +1,16 @@
+{
+  "@@locale": "en",
+  "appTitle": "FocusWallet",
+  "login": "Login",
+  "register": "Register",
+  "loginSubtitle": "Access your account",
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+  "noAccount": "Don't have an account?",
+  "unknownError": "Unknown error: {error}",
+  "auth_user_not_found": "No user found with that email.",
+  "auth_wrong_password": "Incorrect password.",
+  "auth_invalid_email": "The entered email is not valid.",
+  "auth_user_disabled": "This user has been disabled.",
+  "auth_default_error": "Unexpected error. Please try again."
+}
