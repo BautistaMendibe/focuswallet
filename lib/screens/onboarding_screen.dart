@@ -21,22 +21,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             controller: _controller,
             children: [
               OnboardingPage(
-                title: "Controla tu tiempo como si fuera dinero",
-                subtitle: "Asigná un presupuesto y gastalo con conciencia",
+                title: "Gasta tu tiempo como dinero",
+                subtitle: "Cada día tenés un presupuesto de $2 dólares virtuales. Usar tu celular cuesta: cada hora equivale a $1 dólar. ¡Elegí cómo lo gastás!",
                 image: "assets/imgs/onboarding/onboarding_1.png",
-                backgroundColor: Color(0xffffd1b9),
               ),
               OnboardingPage(
-                title: "Alertas inteligentes",
-                subtitle: "Recibí notificaciones cuando estés por excederte",
+                title: "Cada app tiene su propio presupuesto",
+                subtitle: "Instagram, TikTok, Netflix… asigná cuánto estás dispuesto a “gastar” por cada una. Controlá el uso y evitá los excesos sin darte cuenta.",
                 image: "assets/imgs/onboarding/onboarding_2.png",
-                backgroundColor: Color(0xfffffdf3),
               ),
               OnboardingPage(
-                title: "Ganá recompensas",
-                subtitle: "Ahorrá tiempo de pantalla y subí de nivel",
+                title: "Tomá el control de tu atención",
+                subtitle: "Visualizá en tiempo real cuánto consumiste, qué apps usás más y decidí si querés comprar más tiempo o dejarlo ahí. Tu atención, tu decisión.",
                 image: "assets/imgs/onboarding/onboarding_3.png",
-                backgroundColor: Color(0xffb2dcc4),
               ),
             ],
           ),
@@ -109,20 +106,17 @@ class OnboardingPage extends StatelessWidget {
   final String title;
   final String subtitle;
   final String image;
-  final Color backgroundColor;
 
   const OnboardingPage({
     super.key,
     required this.title,
     required this.subtitle,
     required this.image,
-    required this.backgroundColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: backgroundColor,
       padding: EdgeInsets.all(24),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
