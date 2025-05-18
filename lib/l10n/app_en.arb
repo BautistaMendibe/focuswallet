@@ -12,5 +12,18 @@
   "auth_wrong_password": "Incorrect password.",
   "auth_invalid_email": "The entered email is not valid.",
   "auth_user_disabled": "This user has been disabled.",
-  "auth_default_error": "Unexpected error. Please try again."
+  "auth_default_error": "Unexpected error. Please try again.",
+  "registerTitle": "Sign up",
+  "registerSubtitle": "Enter your personal information",
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+  "confirmPasswordLabel": "Confirm password",
+  "registerButton": "Register",
+  "alreadyHaveAccount": "Already have an account?",
+  "goToLogin": "Login",
+  "passwordsDoNotMatch": "Passwords do not match.",
+  "auth_email_already_in_use": "This email is already registered.",
+  "auth_invalid_email": "The entered email is not valid.",
+  "auth_weak_password": "The password is too weak (minimum 6 characters).",
+  "auth_register_default_error": "An unexpected error occurred. Please try again."
 }

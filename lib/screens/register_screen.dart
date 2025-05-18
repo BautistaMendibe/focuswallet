@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -20,10 +21,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscureConfirmPass = true;
 
   void register() async {
+    final loc = AppLocalizations.of(context)!;
+
     if (passCtrl.text != confirmPassCtrl.text) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Las contraseñas no coinciden.'),
+          content: Text(loc.passwordsDoNotMatch),
           backgroundColor: Colors.red.shade400,
         ),
       );
@@ -39,19 +42,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
+
       String errorMsg;
       switch (e.code) {
         case 'email-already-in-use':
-          errorMsg = 'Este correo ya está registrado.';
+          errorMsg = loc.auth_email_already_in_use;
           break;
         case 'invalid-email':
-          errorMsg = 'El correo ingresado no es válido.';
+          errorMsg = loc.auth_invalid_email;
           break;
         case 'weak-password':
-          errorMsg = 'La contraseña es demasiado débil (mínimo 6 caracteres).';
+          errorMsg = loc.auth_weak_password;
           break;
         default:
-          errorMsg = 'Ocurrió un error inesperado. Intenta nuevamente.';
+          errorMsg = loc.auth_register_default_error;
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -76,6 +80,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF9F9FE),
       body: SafeArea(
@@ -89,20 +95,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: BackButton(),
                 ),
                 const SizedBox(height: 20),
-                Image.asset('assets/imgs/iconoapp.png', height: 150,),
+                Image.asset('assets/imgs/iconoapp.png', height: 150),
                 const SizedBox(height: 24),
-                const Text("Registrarse",
-                    style: TextStyle(
-                        fontSize: 24, fontWeight: FontWeight.bold)),
+                Text(
+                  loc.registerTitle,
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 4),
-                const Text("Ingresa tu información personal",
-                    style: TextStyle(color: Colors.grey)),
+                Text(
+                  loc.registerSubtitle,
+                  style: const TextStyle(color: Colors.grey),
+                ),
                 const SizedBox(height: 50),
 
                 // Email
                 TextField(
                   controller: emailCtrl,
-                  decoration: customInputDecoration('Email'),
+                  decoration: customInputDecoration(loc.emailLabel),
                 ),
                 const SizedBox(height: 16),
 
@@ -110,11 +119,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextField(
                   controller: passCtrl,
                   obscureText: _obscurePass,
-                  decoration: customInputDecoration('Contraseña').copyWith(
+                  decoration: customInputDecoration(loc.passwordLabel).copyWith(
                     suffixIcon: IconButton(
-                      icon: Icon(_obscurePass
-                          ? Icons.visibility_off
-                          : Icons.visibility),
+                      icon: Icon(_obscurePass ? Icons.visibility_off : Icons.visibility),
                       onPressed: () {
                         setState(() {
                           _obscurePass = !_obscurePass;
@@ -129,12 +136,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextField(
                   controller: confirmPassCtrl,
                   obscureText: _obscureConfirmPass,
-                  decoration:
-                      customInputDecoration('Confirmar contraseña').copyWith(
+                  decoration: customInputDecoration(loc.confirmPasswordLabel).copyWith(
                     suffixIcon: IconButton(
-                      icon: Icon(_obscureConfirmPass
-                          ? Icons.visibility_off
-                          : Icons.visibility),
+                      icon: Icon(_obscureConfirmPass ? Icons.visibility_off : Icons.visibility),
                       onPressed: () {
                         setState(() {
                           _obscureConfirmPass = !_obscureConfirmPass;
@@ -157,20 +161,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: const Text("Registrar",
-                        style: TextStyle(fontSize: 16, color: Colors.white)),
+                    child: Text(
+                      loc.registerButton,
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("¿Ya tienes cuenta?"),
+                    Text(loc.alreadyHaveAccount),
                     TextButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/login');
                       },
-                      child: const Text("Iniciar sesión", style: TextStyle(color: Color(0xFF009792)),),
+                      child: Text(
+                        loc.goToLogin,
+                        style: const TextStyle(color: Color(0xFF009792)),
+                      ),
                     ),
                   ],
                 )

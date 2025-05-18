@@ -12,5 +12,18 @@
   "auth_wrong_password": "Contraseña incorrecta.",
   "auth_invalid_email": "El correo ingresado no es válido.",
   "auth_user_disabled": "Este usuario ha sido deshabilitado.",
-  "auth_default_error": "Error inesperado. Intenta nuevamente."
+  "auth_default_error": "Error inesperado. Intenta nuevamente.",
+  "registerTitle": "Registrarse",
+  "registerSubtitle": "Ingresa tu información personal",
+  "emailLabel": "Correo electrónico",
+  "passwordLabel": "Contraseña",
+  "confirmPasswordLabel": "Confirmar contraseña",
+  "registerButton": "Registrar",
+  "alreadyHaveAccount": "¿Ya tienes cuenta?",
+  "goToLogin": "Iniciar sesión",
+  "passwordsDoNotMatch": "Las contraseñas no coinciden.",
+  "auth_email_already_in_use": "Este correo ya está registrado.",
+  "auth_invalid_email": "El correo ingresado no es válido.",
+  "auth_weak_password": "La contraseña es demasiado débil (mínimo 6 caracteres).",
+  "auth_register_default_error": "Ocurrió un error inesperado. Intenta nuevamente."
 }
