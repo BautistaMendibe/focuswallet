@@ -91,11 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const Align(
-                  alignment: Alignment.topLeft,
-                  child: BackButton(),
-                ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 100),
                 Image.asset('assets/imgs/iconoapp.png', height: 150,),
                 const SizedBox(height: 24),
                 Text(
