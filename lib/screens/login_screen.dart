@@ -96,11 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: BackButton(),
                 ),
                 const SizedBox(height: 20),
-                const CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.white,
-                  child: Icon(Icons.lock_outline, color: Colors.blue, size: 40),
-                ),
+                Image.asset('assets/imgs/iconoapp.png', height: 150,),
                 const SizedBox(height: 24),
                 Text(
                   loc.login,
@@ -111,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   loc.loginSubtitle,
                   style: const TextStyle(color: Colors.grey),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 50),
 
                 // Email
                 TextField(
@@ -146,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: ElevatedButton(
                     onPressed: login,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF007BFF),
+                      backgroundColor: const Color(0xFF009792),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -168,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       child: Text(
                         loc.register,
-                        style: const TextStyle(color: Color(0xFF007BFF)),
+                        style: const TextStyle(color: Color(0xFF009792)),
                       ),
                     ),
                   ],

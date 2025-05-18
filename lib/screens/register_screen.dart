@@ -89,11 +89,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: BackButton(),
                 ),
                 const SizedBox(height: 20),
-                const CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.white,
-                  child: Icon(Icons.tag, color: Colors.blue, size: 40),
-                ),
+                Image.asset('assets/imgs/iconoapp.png', height: 150,),
                 const SizedBox(height: 24),
                 const Text("Registrarse",
                     style: TextStyle(
@@ -101,7 +97,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 4),
                 const Text("Ingresa tu información personal",
                     style: TextStyle(color: Colors.grey)),
-                const SizedBox(height: 24),
+                const SizedBox(height: 50),
 
                 // Email
                 TextField(
@@ -156,7 +152,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: ElevatedButton(
                     onPressed: register,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF007BFF),
+                      backgroundColor: const Color(0xFF009792),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -174,7 +170,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onPressed: () {
                         Navigator.pushNamed(context, '/login');
                       },
-                      child: const Text("Iniciar sesión", style: TextStyle(color: Color(0xFF007BFF)),),
+                      child: const Text("Iniciar sesión", style: TextStyle(color: Color(0xFF009792)),),
                     ),
                   ],
                 )
