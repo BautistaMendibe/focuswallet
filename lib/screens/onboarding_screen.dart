@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -14,6 +15,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -21,21 +24,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             controller: _controller,
             children: [
               OnboardingPage(
-                title: "Gasta tu tiempo como dinero",
-                subtitle:
-                    "Cada día tenés un presupuesto de \$2 dólares virtuales. Usar tu celular cuesta: cada hora equivale a \$1 dólar. ¡Elegí cómo lo gastás!",
+                title: loc.onboarding1Title,
+                subtitle: loc.onboarding1Subtitle,
                 image: "assets/imgs/onboarding/onboarding_1.png",
               ),
               OnboardingPage(
-                title: "Cada app tiene su propio presupuesto",
-                subtitle:
-                    "Instagram, TikTok, Netflix… asigná cuánto estás dispuesto a “gastar” por cada una. Controlá el uso y evitá los excesos sin darte cuenta.",
+                title: loc.onboarding2Title,
+                subtitle: loc.onboarding2Subtitle,
                 image: "assets/imgs/onboarding/onboarding_2.png",
               ),
               OnboardingPage(
-                title: "Tomá el control de tu atención",
-                subtitle:
-                    "El único método comprobado para dejar de usar tanto el celular. Tu atención, tu libertadf.",
+                title: loc.onboarding3Title,
+                subtitle: loc.onboarding3Subtitle,
                 image: "assets/imgs/onboarding/onboarding_3.png",
               ),
             ],
@@ -49,7 +49,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 SmoothPageIndicator(
                   controller: _controller,
                   count: 3,
-                  effect: WormEffect(dotHeight: 10, dotWidth: 10,dotColor: Color.fromARGB(255, 217, 217, 217), activeDotColor: Colors.indigoAccent),
+                  effect: WormEffect(
+                    dotHeight: 10,
+                    dotWidth: 10,
+                    dotColor: const Color.fromARGB(255, 217, 217, 217),
+                    activeDotColor: const Color(0xFF009792),
+                  ),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
@@ -67,7 +72,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     shape: const StadiumBorder(),
                     minimumSize: const Size(double.infinity, 50),
                   ),
-                  child: const Text("Crear una cuenta"),
+                  child: Text(loc.createAccount),
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton(
@@ -78,14 +83,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     Navigator.pushNamed(context, '/login');
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.indigoAccent,
+                    backgroundColor: const Color(0xFF009792),
                     foregroundColor: Colors.white,
                     elevation: 4,
-                    shadowColor: Colors.indigoAccent,
+                    shadowColor: const Color(0xFF009792),
                     shape: const StadiumBorder(),
                     minimumSize: const Size(double.infinity, 50),
                   ),
-                  child: const Text("Iniciar sesión"),
+                  child: Text(loc.login),
                 ),
               ],
             ),
@@ -111,20 +116,20 @@ class OnboardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(24),
+      padding: const EdgeInsets.all(24),
       color: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(image, height: 300),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(title,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-          SizedBox(height: 16),
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 16),
           Text(subtitle,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: Colors.grey)),
+              style: const TextStyle(fontSize: 14, color: Colors.grey)),
         ],
       ),
     );

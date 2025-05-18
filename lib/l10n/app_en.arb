@@ -1,7 +1,16 @@
 {
   "@@locale": "en",
   "appTitle": "FocusWallet",
+
+  "onboarding1Title": "Spend your time like money",
+  "onboarding1Subtitle": "Each day you have a $2 virtual budget. Using your phone costs money: each hour equals $1. Choose how to spend it!",
+  "onboarding2Title": "Each app has its own budget",
+  "onboarding2Subtitle": "Instagram, TikTok, Netflix... assign how much you're willing to 'spend' on each. Control your usage and avoid unconscious excess.",
+  "onboarding3Title": "Take control of your attention",
+  "onboarding3Subtitle": "The only proven method to stop overusing your phone. Your attention, your freedom.",
+  "createAccount": "Create an account",
   "login": "Login",
+
   "register": "Register",
   "loginSubtitle": "Access your account",
   "emailLabel": "Email",

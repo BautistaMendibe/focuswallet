@@ -1,6 +1,15 @@
 {
   "@@locale": "es",
   "appTitle": "FocusWallet",
+
+  "onboarding1Title": "Gasta tu tiempo como dinero",
+  "onboarding1Subtitle": "Cada día tenés un presupuesto de $2 dólares virtuales. Usar tu celular cuesta: cada hora equivale a $1 dólar. ¡Elegí cómo lo gastás!",
+  "onboarding2Title": "Cada app tiene su propio presupuesto",
+  "onboarding2Subtitle": "Instagram, TikTok, Netflix… asigná cuánto estás dispuesto a “gastar” por cada una. Controlá el uso y evitá los excesos sin darte cuenta.",
+  "onboarding3Title": "Tomá el control de tu atención",
+  "onboarding3Subtitle": "El único método comprobado para dejar de usar tanto el celular. Tu atención, tu libertad.",
+  "createAccount": "Crear una cuenta",
+
   "login": "Iniciar sesión",
   "register": "Registrarse",
   "loginSubtitle": "Accede a tu cuenta",
