@@ -13,6 +13,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final emailCtrl = TextEditingController();
   final passCtrl = TextEditingController();
   final _authService = AuthService();
+  bool _obscurePass = true;
 
   void login() async {
     try {
@@ -54,7 +55,6 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } catch (e) {
       if (!mounted) return;
-      debugPrint('Error: ${e.toString()}');
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -65,36 +65,102 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  InputDecoration customInputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+      filled: true,
+      fillColor: Colors.grey.shade100,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Iniciar sesión")),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextField(
-                controller: emailCtrl,
-                decoration: InputDecoration(labelText: 'Email')),
-            TextField(
-                controller: passCtrl,
-                decoration: InputDecoration(labelText: 'Contraseña'),
-                obscureText: true),
-            const SizedBox(height: 20),
-            ElevatedButton(onPressed: login, child: const Text("Ingresar")),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+      backgroundColor: const Color(0xFFF9F9FE),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: SingleChildScrollView(
+            child: Column(
               children: [
-                const Text("¿No tienes cuenta?"),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/register');
-                  },
-                  child: const Text("Registrarse"),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: BackButton(),
                 ),
+                const SizedBox(height: 20),
+                const CircleAvatar(
+                  radius: 40,
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.lock_outline, color: Colors.blue, size: 40),
+                ),
+                const SizedBox(height: 24),
+                const Text("Iniciar sesión",
+                    style: TextStyle(
+                        fontSize: 24, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 4),
+                const Text("Accede a tu cuenta",
+                    style: TextStyle(color: Colors.grey)),
+                const SizedBox(height: 24),
+
+                // Email
+                TextField(
+                  controller: emailCtrl,
+                  decoration: customInputDecoration('Email'),
+                ),
+                const SizedBox(height: 16),
+
+                // Password
+                TextField(
+                  controller: passCtrl,
+                  obscureText: _obscurePass,
+                  decoration: customInputDecoration('Contraseña').copyWith(
+                    suffixIcon: IconButton(
+                      icon: Icon(_obscurePass
+                          ? Icons.visibility_off
+                          : Icons.visibility),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePass = !_obscurePass;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 32),
+
+                // Login button
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: login,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF007BFF),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: const Text("Iniciar sesión",
+                        style: TextStyle(fontSize: 16, color: Colors.white)),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("¿No tienes cuenta?"),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/register');
+                      },
+                      child: const Text("Registrarse", style: TextStyle(color: Color(0xFF007BFF)),),
+                    ),
+                  ],
+                )
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
