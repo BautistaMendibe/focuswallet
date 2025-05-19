@@ -24,7 +24,7 @@ class TodayUseCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: (0.05 * 255)),
+        color: color.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -34,7 +34,7 @@ class TodayUseCard extends StatelessWidget {
           Row(
             children: [
               CircleAvatar(
-               backgroundColor: color.withValues(alpha: (0.2 * 255)),
+               backgroundColor: color.withValues(alpha: 0.15),
                 child: Icon(icon, color: color),
               ),
               const SizedBox(width: 12),
