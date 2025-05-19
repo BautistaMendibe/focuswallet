@@ -24,7 +24,7 @@ class TodayUseCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.04),
+        border: Border.all(color: Colors.grey.shade200),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(

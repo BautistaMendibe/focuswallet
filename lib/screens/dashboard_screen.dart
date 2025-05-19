@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:focuswallet/components/budget_summary.dart';
 import 'package:focuswallet/components/today_use_card.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -67,43 +68,27 @@ class DashboardScreen extends StatelessWidget {
               const SizedBox(height: 25),
 
               // Progress bar
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        children: const [
-                          Text("Spent"),
-                          Text("\$1 (1h)",
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        children: const [
-                          Text("Daily budget"),
-                          Text("\$2 (2h)",
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              BudgetSummary(
+                spentAmount: 1,
+                spentHours: 1,
+                budgetAmount: 2,
+                budgetHours: 2,
+                segments: [
+                  BudgetSegment(
+                      fraction: 0.25, color: Colors.deepOrange), // Spotify
+                  BudgetSegment(
+                      fraction: 0.25, color: Colors.lightBlue), // TikTok
+                  BudgetSegment(
+                      fraction: 0.25, color: Colors.deepPurple), // Instagram
+                ],
               ),
 
               const SizedBox(height: 25),
 
-              
               const Text("Today use",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 12),
-              
+
               Expanded(
                 child: ListView(
                   children: [
