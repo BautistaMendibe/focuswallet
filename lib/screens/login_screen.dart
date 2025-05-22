@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'dart:developer';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,19 +18,26 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _obscurePass = true;
 
   void login() async {
+    print("Intentando login...");
     try {
       final user = await _authService.login(emailCtrl.text, passCtrl.text);
+      print("Resultado del login: $user");
+
       if (!mounted) return;
 
       if (user != null) {
+        print("Login exitoso. Navegando al dashboard.");
         Navigator.pushReplacementNamed(context, '/dashboard');
+      } else {
+        print("Login fallido: user es null");
       }
     } on FirebaseAuthException catch (e) {
+      print("FirebaseAuthException: ${e.code} - ${e.message}");
       if (!mounted) return;
 
       final loc = AppLocalizations.of(context)!;
-
       String errorMsg;
+
       switch (e.code) {
         case 'user-not-found':
           errorMsg = loc.auth_user_not_found;
@@ -57,6 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
     } catch (e) {
+      print("Error inesperado: $e");
       if (!mounted) return;
 
       final loc = AppLocalizations.of(context)!;
@@ -92,11 +101,15 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: [
                 const SizedBox(height: 100),
-                Image.asset('assets/imgs/iconoapp.png', height: 150,),
+                Image.asset(
+                  'assets/imgs/iconoapp.png',
+                  height: 150,
+                ),
                 const SizedBox(height: 24),
                 Text(
                   loc.login,
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
                 Text(
