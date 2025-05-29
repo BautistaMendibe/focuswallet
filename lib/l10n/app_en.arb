@@ -32,5 +32,7 @@
   "passwordsDoNotMatch": "Passwords do not match.",
   "auth_email_already_in_use": "This email is already registered.",
   "auth_weak_password": "The password is too weak (minimum 6 characters).",
-  "auth_register_default_error": "An unexpected error occurred. Please try again."
+  "auth_register_default_error": "An unexpected error occurred. Please try again.",
+
+  "hello": "Hello"
 }

@@ -32,5 +32,7 @@
   "auth_email_already_in_use": "Este correo ya está registrado.",
   "auth_invalid_email": "El correo ingresado no es válido.",
   "auth_weak_password": "La contraseña es demasiado débil (mínimo 6 caracteres).",
-  "auth_register_default_error": "Ocurrió un error inesperado. Intenta nuevamente."
+  "auth_register_default_error": "Ocurrió un error inesperado. Intenta nuevamente.",
+
+  "hello": "Hola"
 }
