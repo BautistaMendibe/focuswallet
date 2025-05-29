@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:focuswallet/components/budget_summary.dart';
 import 'package:focuswallet/components/today_use_card.dart';
+import 'package:focuswallet/services/auth_service.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final authService = AuthService(); 
+
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavigationBar(
@@ -32,12 +35,18 @@ class DashboardScreen extends StatelessWidget {
               // Header
               Row(
                 children: [
-                  const CircleAvatar(
-                      radius: 24,
-                      child: Text(
-                        '👨🏼',
-                        style: TextStyle(fontSize: 25),
-                      )),
+                  GestureDetector(
+                    onTap: () {
+                      authService.logout();
+                      Navigator.pushReplacementNamed(context, '/login');
+                    },
+                    child: const CircleAvatar(
+                        radius: 24,
+                        child: Text(
+                          '👨🏼',
+                          style: TextStyle(fontSize: 25),
+                        )),
+                  ),
                   const SizedBox(width: 12),
                   const Text("Hello,\nAbdullah!",
                       style:

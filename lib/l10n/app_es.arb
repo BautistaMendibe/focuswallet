@@ -22,6 +22,7 @@
   "auth_invalid_email": "El correo ingresado no es válido.",
   "auth_user_disabled": "Este usuario ha sido deshabilitado.",
   "auth_default_error": "Error inesperado. Intenta nuevamente.",
+  "auth_invalid_credential": "Mail o contraseña incorrecta",
   "registerTitle": "Registrarse",
   "registerSubtitle": "Ingresa tu información personal",
   "emailLabel": "Correo electrónico",

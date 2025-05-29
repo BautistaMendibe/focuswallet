@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'dart:developer';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -20,8 +19,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void login() async {
     print("Intentando login...");
     try {
-      final user = await _authService.login(emailCtrl.text, passCtrl.text);
-      print("Resultado del login: $user");
+      final User? user = await _authService.login(emailCtrl.text, passCtrl.text);
+      print("Resultado del login - tipo: ${user?.runtimeType}, datos: $user");
 
       if (!mounted) return;
 
@@ -50,6 +49,9 @@ class _LoginScreenState extends State<LoginScreen> {
           break;
         case 'user-disabled':
           errorMsg = loc.auth_user_disabled;
+          break;
+        case 'invalid-credential':
+          errorMsg = loc.auth_invalid_credential;
           break;
         default:
           errorMsg = loc.auth_default_error;

@@ -22,6 +22,7 @@
   "auth_invalid_email": "The entered email is not valid.",
   "auth_user_disabled": "This user has been disabled.",
   "auth_default_error": "Unexpected error. Please try again.",
+  "auth_invalid_credential": "Incorrect password or mail.",
   "registerTitle": "Sign up",
   "registerSubtitle": "Enter your personal information",
   "emailLabel": "Email",

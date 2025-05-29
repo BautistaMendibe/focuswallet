@@ -12,11 +12,19 @@ class AuthService {
   }
 
   Future<User?> login(String email, String password) async {
-    final userCredential = await _auth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    return userCredential.user;
+    try {
+      final userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      
+      final user = userCredential.user;
+      print('Login successful. User data type: ${user.runtimeType}');
+      return user;
+    } catch (e) {
+      print('Login error: $e');
+      rethrow;
+    }
   }
 
   Future<void> logout() async {
