@@ -17,21 +17,21 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _obscurePass = true;
 
   void login() async {
-    print("Intentando login...");
+    //print("Intentando login...");
     try {
       final User? user = await _authService.login(emailCtrl.text, passCtrl.text);
-      print("Resultado del login - tipo: ${user?.runtimeType}, datos: $user");
+      //print("Resultado del login - tipo: ${user?.runtimeType}, datos: $user");
 
       if (!mounted) return;
 
       if (user != null) {
-        print("Login exitoso. Navegando al dashboard.");
+        //print("Login exitoso. Navegando al dashboard.");
         Navigator.pushReplacementNamed(context, '/dashboard');
       } else {
-        print("Login fallido: user es null");
+        //print("Login fallido: user es null");
       }
     } on FirebaseAuthException catch (e) {
-      print("FirebaseAuthException: ${e.code} - ${e.message}");
+      //print("FirebaseAuthException: ${e.code} - ${e.message}");
       if (!mounted) return;
 
       final loc = AppLocalizations.of(context)!;
@@ -67,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
     } catch (e) {
-      print("Error inesperado: $e");
+      //print("Error inesperado: $e");
       if (!mounted) return;
 
       final loc = AppLocalizations.of(context)!;
