@@ -19,10 +19,10 @@ class AuthService {
       );
       
       final user = userCredential.user;
-      print('Login successful. User data type: ${user.runtimeType}');
+      //print('Login successful. User data type: ${user.runtimeType}');
       return user;
     } catch (e) {
-      print('Login error: $e');
+      //print('Login error: $e');
       rethrow;
     }
   }
