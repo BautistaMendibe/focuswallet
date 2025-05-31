@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -20,10 +21,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscurePass = true;
   bool _obscureConfirmPass = true;
 
+  Future<void> _initializeUserDefaults(String userId) async {
+    final firestore = FirebaseFirestore.instance;
+    
+    // Initialize user settings
+    await firestore.collection('users').doc(userId).set({
+      'settings': {
+        'pricePerHour': 2.0,
+        'dailyBudget': 2.0,
+      }
+    });
+
+    // Initialize category budgets
+    final categoryBudgetsRef = firestore.collection('users').doc(userId).collection('categoryBudgets');
+    
+    await Future.wait([
+      categoryBudgetsRef.doc('social_media').set({
+        'name': 'Redes sociales',
+        'amount': 1.0,
+      }),
+      categoryBudgetsRef.doc('streaming').set({
+        'name': 'Streaming',
+        'amount': 0.5,
+      }),
+      categoryBudgetsRef.doc('juegos').set({
+        'name': 'Juegos',
+        'amount': 0.5,
+      }),
+    ]);
+  }
+
   void register() async {
     final loc = AppLocalizations.of(context)!;
 
     if (passCtrl.text != confirmPassCtrl.text) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(loc.passwordsDoNotMatch),
@@ -38,6 +70,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (!mounted) return;
 
       if (user != null) {
+        await _initializeUserDefaults(user.uid);
+        if (!mounted) return;
         Navigator.pushReplacementNamed(context, '/dashboard');
       }
     } on FirebaseAuthException catch (e) {
