@@ -23,35 +23,49 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future<void> _initializeUserDefaults(String userId) async {
     final firestore = FirebaseFirestore.instance;
-    
-    // Initialize user settings
-    await firestore.collection('users').doc(userId).set({
-      'settings': {
-        'pricePerHour': 2.0,
-        'dailyBudget': 2.0,
-      }
-    });
 
-    // Initialize category budgets
-    final categoryBudgetsRef = firestore.collection('users').doc(userId).collection('categoryBudgets');
-    
-    await Future.wait([
-      categoryBudgetsRef.doc('social_media').set({
-        'name': 'Redes sociales',
-        'amount': 1.0,
-      }),
-      categoryBudgetsRef.doc('streaming').set({
-        'name': 'Streaming',
-        'amount': 0.5,
-      }),
-      categoryBudgetsRef.doc('juegos').set({
-        'name': 'Juegos',
-        'amount': 0.5,
-      }),
-    ]);
-  }
+    try {
+      //print('Inicializando settings...');
+      await firestore.collection('users').doc(userId).set({
+        'settings': {
+          'pricePerHour': 2.0,
+          'dailyBudget': 2.0,
+        }
+      });
+      //print('Settings guardados correctamente.');
+    } catch (e) {
+      //print('Error al guardar settings: $e');
+      rethrow;
+    }
+
+    try {
+      //print('Inicializando categoryBudgets...');
+      final categoryBudgetsRef = firestore.collection('users').doc(userId).collection('categoryBudgets');
+
+      await Future.wait([
+        categoryBudgetsRef.doc('social_media').set({
+          'name': 'Redes sociales',
+          'amount': 1.0,
+        }),
+        categoryBudgetsRef.doc('streaming').set({
+          'name': 'Streaming',
+          'amount': 0.5,
+        }),
+        categoryBudgetsRef.doc('juegos').set({
+          'name': 'Juegos',
+          'amount': 0.5,
+        }),
+      ]);
+      //print('CategoryBudgets guardados correctamente.');
+    } catch (e) {
+      //print('Error al guardar categoryBudgets: $e');
+      rethrow;
+    }
+}
+
 
   void register() async {
+   //print('Iniciando registro...');
     final loc = AppLocalizations.of(context)!;
 
     if (passCtrl.text != confirmPassCtrl.text) {
@@ -67,11 +81,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     try {
       final user = await _authService.register(emailCtrl.text, passCtrl.text);
+      //print('Usuario registrado: $user');
       if (!mounted) return;
 
       if (user != null) {
         await _initializeUserDefaults(user.uid);
         if (!mounted) return;
+        //print('Registro y datos iniciales completados. Navegando al dashboard...');
         Navigator.pushReplacementNamed(context, '/dashboard');
       }
     } on FirebaseAuthException catch (e) {
