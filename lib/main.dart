@@ -21,7 +21,7 @@ class FocusWalletApp extends StatelessWidget {
       title: 'FocusWallet',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
+        primarySwatch: Colors.teal,
         fontFamily: 'Inter',
       ),
       localizationsDelegates: const [
