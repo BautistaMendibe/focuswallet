@@ -53,17 +53,11 @@ class DashboardScreen extends StatelessWidget {
                       authService.logout();
                       Navigator.pushReplacementNamed(context, '/login');
                     },
-                    child: const CircleAvatar(
-                        radius: 24,
-                        child: Text(
-                          '👨🏼',
-                          style: TextStyle(fontSize: 25),
-                        )),
+                    child: const Text(
+                      'Time Wallet',
+                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
                   ),
-                  const SizedBox(width: 12),
-                  Text("${loc.hello},\n$displayName!",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const Spacer(),
                   Row(
                     children: const [
