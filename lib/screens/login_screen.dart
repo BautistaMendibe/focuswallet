@@ -15,23 +15,22 @@ class _LoginScreenState extends State<LoginScreen> {
   final passCtrl = TextEditingController();
   final _authService = AuthService();
   bool _obscurePass = true;
+  bool _isLoading = false;
 
   void login() async {
-    //print("Intentando login...");
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       final User? user = await _authService.login(emailCtrl.text, passCtrl.text);
-      //print("Resultado del login - tipo: ${user?.runtimeType}, datos: $user");
 
       if (!mounted) return;
 
       if (user != null) {
-        //print("Login exitoso. Navegando al dashboard.");
         Navigator.pushReplacementNamed(context, '/dashboard');
-      } else {
-        //print("Login fallido: user es null");
       }
     } on FirebaseAuthException catch (e) {
-      //print("FirebaseAuthException: ${e.code} - ${e.message}");
       if (!mounted) return;
 
       final loc = AppLocalizations.of(context)!;
@@ -67,7 +66,6 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
     } catch (e) {
-      //print("Error inesperado: $e");
       if (!mounted) return;
 
       final loc = AppLocalizations.of(context)!;
@@ -78,6 +76,12 @@ class _LoginScreenState extends State<LoginScreen> {
           backgroundColor: Colors.red.shade400,
         ),
       );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -151,17 +155,26 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: login,
+                    onPressed: _isLoading ? null : login,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF009792),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: Text(
-                      loc.login,
-                      style: const TextStyle(fontSize: 16, color: Colors.white),
-                    ),
+                    child: _isLoading
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : Text(
+                            loc.login,
+                            style: const TextStyle(fontSize: 16, color: Colors.white),
+                          ),
                   ),
                 ),
                 const SizedBox(height: 16),
