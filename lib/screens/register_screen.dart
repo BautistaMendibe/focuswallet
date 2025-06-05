@@ -20,6 +20,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool _obscurePass = true;
   bool _obscureConfirmPass = true;
+  bool _isLoading = false;
 
   Future<void> _initializeUserDefaults(String userId) async {
     final firestore = FirebaseFirestore.instance;
@@ -65,7 +66,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
 
   void register() async {
-   //print('Iniciando registro...');
     final loc = AppLocalizations.of(context)!;
 
     if (passCtrl.text != confirmPassCtrl.text) {
@@ -79,15 +79,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
 
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       final user = await _authService.register(emailCtrl.text, passCtrl.text);
-      //print('Usuario registrado: $user');
       if (!mounted) return;
 
       if (user != null) {
         await _initializeUserDefaults(user.uid);
         if (!mounted) return;
-        //print('Registro y datos iniciales completados. Navegando al dashboard...');
         Navigator.pushReplacementNamed(context, '/dashboard');
       }
     } on FirebaseAuthException catch (e) {
@@ -116,6 +118,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           margin: const EdgeInsets.all(16),
         ),
       );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -200,17 +208,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: register,
+                    onPressed: _isLoading ? null : register,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF009792),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: Text(
-                      loc.registerButton,
-                      style: const TextStyle(fontSize: 16, color: Colors.white),
-                    ),
+                    child: _isLoading
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : Text(
+                            loc.registerButton,
+                            style: const TextStyle(fontSize: 16, color: Colors.white),
+                          ),
                   ),
                 ),
                 const SizedBox(height: 16),
