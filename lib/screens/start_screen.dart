@@ -28,7 +28,7 @@ class _StartScreenState extends State<StartScreen> {
 
     // Redirige según corresponda
     if (user != null) {
-      Navigator.pushReplacementNamed(context, '/dashboard');
+      Navigator.pushReplacementNamed(context, '/main');
     } else if (seen) {
       Navigator.pushReplacementNamed(context, '/login');
     } else {
