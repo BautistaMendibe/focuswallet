@@ -55,6 +55,7 @@ class _AddAppModalState extends State<AddAppModal> {
         SnackBar(
           content: Text(loc.errorSavingData),
           backgroundColor: Colors.red.shade400,
+          behavior: SnackBarBehavior.floating,
         ),
       );
     } finally {
@@ -70,90 +71,174 @@ class _AddAppModalState extends State<AddAppModal> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     
-    return Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-        top: 16,
-        left: 16,
-        right: 16,
+    return Container(
+      margin: const EdgeInsets.all(16),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              loc.addNewApp,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            TextFormField(
-              controller: _nameController,
-              decoration: InputDecoration(
-                labelText: loc.appName,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+          top: 24,
+          left: 24,
+          right: 24,
+        ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Handle bar
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE5E7EB),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
                 ),
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return loc.requiredField;
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-            Text(
-              '${loc.hoursPerDay}: ${_hours.toStringAsFixed(1)}h',
-              style: const TextStyle(fontSize: 16),
-              textAlign: TextAlign.center,
-            ),
-            Slider(
-              value: _hours,
-              min: 0,
-              max: 24,
-              divisions: 48,
-              activeColor: const Color(0xFF009792),
-              onChanged: (value) {
-                setState(() {
-                  _hours = value;
-                });
-              },
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: _isLoading ? null : _saveApp,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF009792),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+              const SizedBox(height: 24),
+              
+              Text(
+                loc.addNewApp,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1A1A1A),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+              
+              // App name field
+              TextFormField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  labelText: loc.appName,
+                  labelStyle: const TextStyle(
+                    color: Color(0xFF6B7280),
+                    fontSize: 16,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF009792), width: 2),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  filled: true,
+                  fillColor: const Color(0xFFF9FAFB),
+                ),
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFF1A1A1A),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return loc.requiredField;
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 24),
+              
+              // Hours selection
+              Text(
+                '${loc.hoursPerDay}: ${_hours.toStringAsFixed(1)} horas',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF1A1A1A),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              
+              SliderTheme(
+                data: SliderTheme.of(context).copyWith(
+                  activeTrackColor: const Color(0xFF009792),
+                  inactiveTrackColor: const Color(0xFFE5E7EB),
+                  thumbColor: const Color(0xFF009792),
+                  overlayColor: const Color(0xFF009792).withValues(alpha: 0.2),
+                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
+                  trackHeight: 4,
+                ),
+                child: Slider(
+                  value: _hours,
+                  min: 0.5,
+                  max: 6.0,
+                  divisions: 11,
+                  onChanged: (value) {
+                    setState(() {
+                      _hours = value;
+                    });
+                  },
                 ),
               ),
-              child: _isLoading
-                  ? const SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                        strokeWidth: 2,
-                      ),
-                    )
-                  : Text(
-                      loc.save,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
+              
+              // Min/Max labels
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '0.5h',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF6B7280),
                       ),
                     ),
-            ),
-            const SizedBox(height: 16),
-          ],
+                    Text(
+                      '6h',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF6B7280),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              
+              const SizedBox(height: 32),
+              
+              // Save button
+              ElevatedButton(
+                onPressed: _isLoading ? null : _saveApp,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF009792),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 0,
+                ),
+                child: _isLoading
+                    ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : Text(
+                        loc.save,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );

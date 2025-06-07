@@ -65,6 +65,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       builder: (context) => AddAppModal(
         onAppAdded: () {
           setState(() {});
@@ -80,115 +81,200 @@ class _BudgetScreenState extends State<BudgetScreen> {
 
     if (_isLoading) {
       return const Scaffold(
+        backgroundColor: Color(0xFFF8F9FA),
         body: Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            color: Color(0xFF009792),
+          ),
         ),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(loc.budgetTitle),
-        backgroundColor: const Color(0xFF009792),
-      ),
-      body: Column(
-        children: [
-          // Price per hour card
-          Card(
-            margin: const EdgeInsets.all(16),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+      backgroundColor: const Color(0xFFF8F9FA),
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header Section
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${loc.pricePerHour}: \$${_pricePerHour.toStringAsFixed(2)}',
+                    loc.budgetTitle,
                     style: const TextStyle(
-                      fontSize: 20,
+                      fontSize: 32,
                       fontWeight: FontWeight.bold,
+                      color: Color(0xFF1A1A1A),
                     ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    loc.pricePerHour,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF6B7280),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '\$${_pricePerHour.toStringAsFixed(0)}',
+                    style: const TextStyle(
+                      fontSize: 48,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1A1A1A),
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Distribuir horas por app',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF1A1A1A),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: _showAddAppModal,
+                        child: Container(
+                          width: 32,
+                          height: 32,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF009792),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-          ),
 
-          // Apps list
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
+            // Total Hours Display
+            StreamBuilder<QuerySnapshot>(
               stream: _firestore
                   .collection('users')
                   .doc(userId)
                   .collection('categoryBudgets')
                   .snapshots(),
               builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Center(child: Text(loc.errorLoadingData));
-                }
-
-                if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                final apps = snapshot.data!.docs;
                 double totalHours = 0;
                 
-                for (var app in apps) {
-                  totalHours += (app.data() as Map<String, dynamic>)['amount'] ?? 0.0;
+                if (snapshot.hasData) {
+                  for (var app in snapshot.data!.docs) {
+                    totalHours += (app.data() as Map<String, dynamic>)['amount'] ?? 0.0;
+                  }
                 }
 
-                return Column(
-                  children: [
-                    // Total hours card
-                    Card(
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '${loc.totalHoursPerDay}: ${totalHours.toStringAsFixed(1)}h',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Text(
+                    'Uso máximo del celular por día: ${totalHours.toStringAsFixed(1)}h',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFF6B7280),
                     ),
-                    
-                    Expanded(
-                      child: ListView.builder(
-                        padding: const EdgeInsets.all(16),
-                        itemCount: apps.length,
-                        itemBuilder: (context, index) {
-                          final app = apps[index];
-                          final appData = app.data() as Map<String, dynamic>;
-                          
-                          return AppBudgetTile(
-                            name: appData['name'] ?? '',
-                            hours: (appData['amount'] ?? 0.0).toDouble(),
-                            icon: appData['icon'],
-                            onChanged: (newHours) {
-                              _updateAppBudget(app.id, newHours);
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ],
+                  ),
                 );
               },
             ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showAddAppModal,
-        backgroundColor: const Color(0xFF009792),
-        child: const Icon(Icons.add),
+
+            const SizedBox(height: 24),
+
+            // Apps List
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: _firestore
+                    .collection('users')
+                    .doc(userId)
+                    .collection('categoryBudgets')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        loc.errorLoadingData,
+                        style: const TextStyle(color: Color(0xFF6B7280)),
+                      ),
+                    );
+                  }
+
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: Color(0xFF009792),
+                      ),
+                    );
+                  }
+
+                  final apps = snapshot.data!.docs;
+
+                  if (apps.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.apps,
+                            size: 64,
+                            color: Colors.grey.shade400,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'No hay apps configuradas',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.grey.shade600,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Toca el botón "+" para agregar tu primera app',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey.shade500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  return ListView.separated(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    itemCount: apps.length,
+                    separatorBuilder: (context, index) => const SizedBox(height: 16),
+                    itemBuilder: (context, index) {
+                      final app = apps[index];
+                      final appData = app.data() as Map<String, dynamic>;
+                      
+                      return AppBudgetTile(
+                        name: appData['name'] ?? '',
+                        hours: (appData['amount'] ?? 0.0).toDouble(),
+                        icon: appData['icon'],
+                        onChanged: (newHours) {
+                          _updateAppBudget(app.id, newHours);
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
