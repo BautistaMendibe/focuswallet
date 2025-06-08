@@ -24,11 +24,14 @@ class _AppBudgetTileState extends State<AppBudgetTile> with SingleTickerProvider
   int _selectedTab = 1; // 0 for minutes, 1 for hours
   late AnimationController _animationController;
   late Animation<double> _animation;
+  final _valueController = TextEditingController();
+  final _valueFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    _currentValue = widget.hours;
+    _currentValue = widget.hours.clamp(0.5, 6.0); // Ensure initial value is valid
+    _updateControllerText();
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
@@ -42,6 +45,8 @@ class _AppBudgetTileState extends State<AppBudgetTile> with SingleTickerProvider
   @override
   void dispose() {
     _animationController.dispose();
+    _valueController.dispose();
+    _valueFocusNode.dispose();
     super.dispose();
   }
 
@@ -49,8 +54,52 @@ class _AppBudgetTileState extends State<AppBudgetTile> with SingleTickerProvider
   void didUpdateWidget(AppBudgetTile oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.hours != widget.hours) {
-      _currentValue = widget.hours;
+      _currentValue = widget.hours.clamp(0.5, 6.0); // Ensure updated value is valid
+      _updateControllerText();
     }
+  }
+
+  void _updateControllerText() {
+    if (_selectedTab == 0) {
+      _valueController.text = (_currentValue * 60).round().toString();
+    } else {
+      _valueController.text = _currentValue.toStringAsFixed(1);
+    }
+  }
+
+  void _onValueSubmitted(String value) async {
+    double newValue;
+    if (_selectedTab == 0) {
+      // Minutes tab
+      final minutes = int.tryParse(value);
+      if (minutes != null && minutes >= 30 && minutes <= 360) { // Min 30 minutes (0.5 hours)
+        newValue = minutes / 60.0;
+      } else {
+        _updateControllerText();
+        _valueFocusNode.unfocus();
+        return;
+      }
+    } else {
+      // Hours tab
+      final hours = double.tryParse(value);
+      if (hours != null && hours >= 0.5 && hours <= 6.0) {
+        newValue = hours;
+      } else {
+        _updateControllerText();
+        _valueFocusNode.unfocus();
+        return;
+      }
+    }
+    
+    // Ensure value is within slider range
+    newValue = newValue.clamp(0.5, 6.0);
+    
+    setState(() {
+      _currentValue = newValue;
+      _updateControllerText(); // Update controller with clamped value
+    });
+    widget.onChanged(newValue);
+    _valueFocusNode.unfocus();
   }
 
   void _toggleExpanded() {
@@ -231,7 +280,12 @@ class _AppBudgetTileState extends State<AppBudgetTile> with SingleTickerProvider
                       children: [
                         Expanded(
                           child: GestureDetector(
-                            onTap: () => setState(() => _selectedTab = 0),
+                            onTap: () {
+                              setState(() {
+                                _selectedTab = 0;
+                                _updateControllerText();
+                              });
+                            },
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
@@ -259,7 +313,12 @@ class _AppBudgetTileState extends State<AppBudgetTile> with SingleTickerProvider
                         ),
                         Expanded(
                           child: GestureDetector(
-                            onTap: () => setState(() => _selectedTab = 1),
+                            onTap: () {
+                              setState(() {
+                                _selectedTab = 1;
+                                _updateControllerText();
+                              });
+                            },
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
@@ -291,15 +350,59 @@ class _AppBudgetTileState extends State<AppBudgetTile> with SingleTickerProvider
                   
                   const SizedBox(height: 20),
                   
-                  // Value display
-                  Text(
-                    _selectedTab == 0 
-                        ? '${(_currentValue * 60).round()} minutos'
-                        : '${_currentValue.toStringAsFixed(1)} horas',
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1A1A1A),
+                  // Value display - editable
+                  GestureDetector(
+                    onTap: () {
+                      _valueController.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: _valueController.text.length,
+                      );
+                      _valueFocusNode.requestFocus();
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IntrinsicWidth(
+                          child: TextField(
+                            controller: _valueController,
+                            focusNode: _valueFocusNode,
+                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            textInputAction: TextInputAction.done,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1A1A1A),
+                            ),
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.zero,
+                            ),
+                            onSubmitted: _onValueSubmitted,
+                            onEditingComplete: () {
+                              _onValueSubmitted(_valueController.text);
+                            },
+                            onTapOutside: (event) {
+                              _onValueSubmitted(_valueController.text);
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          _selectedTab == 0 ? 'minutos' : 'horas',
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1A1A1A),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        const Icon(
+                          Icons.edit,
+                          color: Color(0xFF009792),
+                          size: 16,
+                        ),
+                      ],
                     ),
                   ),
                   
@@ -326,7 +429,7 @@ class _AppBudgetTileState extends State<AppBudgetTile> with SingleTickerProvider
                             trackHeight: 4,
                           ),
                           child: Slider(
-                            value: _currentValue,
+                            value: _currentValue.clamp(0.5, 6.0),
                             min: 0.5,
                             max: 6.0,
                             divisions: 11, // (6.0 - 0.5) / 0.5 = 11

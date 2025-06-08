@@ -15,6 +15,8 @@ class BudgetScreen extends StatefulWidget {
 class _BudgetScreenState extends State<BudgetScreen> {
   final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
+  final _priceController = TextEditingController();
+  final _priceFocusNode = FocusNode();
   double _pricePerHour = 0.0;
   bool _isLoading = true;
 
@@ -37,6 +39,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
       if (settingsDoc.exists) {
         setState(() {
           _pricePerHour = (settingsDoc.data()?['settings']?['pricePerHour'] ?? 0.0).toDouble();
+          _priceController.text = _pricePerHour.toStringAsFixed(0);
           _isLoading = false;
         });
       }
@@ -61,6 +64,37 @@ class _BudgetScreenState extends State<BudgetScreen> {
     }
   }
 
+  Future<void> _updatePricePerHour(double newPrice) async {
+    try {
+      final userId = _auth.currentUser?.uid;
+      if (userId == null) return;
+
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .update({
+        'settings.pricePerHour': newPrice,
+      });
+
+      setState(() {
+        _pricePerHour = newPrice;
+        _priceController.text = newPrice.toStringAsFixed(0);
+      });
+    } catch (e) {
+      debugPrint('Error updating price per hour: $e');
+      if (!mounted) return;
+      
+      final loc = AppLocalizations.of(context)!;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(loc.errorSavingData),
+          backgroundColor: Colors.red.shade400,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
   void _showAddAppModal() {
     showModalBottomSheet(
       context: context,
@@ -72,6 +106,15 @@ class _BudgetScreenState extends State<BudgetScreen> {
         },
       ),
     );
+  }
+
+  void _onPriceSubmitted(String value) async {
+    final newPrice = double.tryParse(value);
+    if (newPrice != null && newPrice > 0) {
+      await _updatePricePerHour(newPrice);
+    } else {
+      _priceController.text = _pricePerHour.toStringAsFixed(0);
+    }
   }
 
   @override
@@ -119,12 +162,58 @@ class _BudgetScreenState extends State<BudgetScreen> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    '\$${_pricePerHour.toStringAsFixed(0)}',
-                    style: const TextStyle(
-                      fontSize: 48,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1A1A1A),
+                  GestureDetector(
+                    onTap: () {
+                      _priceController.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: _priceController.text.length,
+                      );
+                      _priceFocusNode.requestFocus();
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '\$',
+                          style: const TextStyle(
+                            fontSize: 48,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1A1A1A),
+                          ),
+                        ),
+                        IntrinsicWidth(
+                          child: TextField(
+                            controller: _priceController,
+                            focusNode: _priceFocusNode,
+                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            textInputAction: TextInputAction.done,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 48,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1A1A1A),
+                            ),
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.zero,
+                            ),
+                            onSubmitted: _onPriceSubmitted,
+                            onEditingComplete: () {
+                              _onPriceSubmitted(_priceController.text);
+                            },
+                            onTapOutside: (event) {
+                              _onPriceSubmitted(_priceController.text);
+                              _priceFocusNode.unfocus();
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        const Icon(
+                          Icons.edit,
+                          color: Color(0xFF009792),
+                          size: 20,
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 32),
