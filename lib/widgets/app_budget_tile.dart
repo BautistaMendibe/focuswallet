@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 class AppBudgetTile extends StatefulWidget {
   final String name;
   final double hours;
@@ -154,85 +155,35 @@ class _AppBudgetTileState extends State<AppBudgetTile> with SingleTickerProvider
     }
   }
 
-  Widget _getAppIcon() {
-    if (widget.name.toLowerCase().contains('spotify')) {
-      return Container(
-        width: 40,
-        height: 40,
-        decoration: const BoxDecoration(
-          color: Color(0xFF1DB954),
-          shape: BoxShape.circle,
-        ),
-        child: const Icon(
-          Icons.music_note,
-          color: Colors.white,
-          size: 20,
-        ),
-      );
-    } else if (widget.name.toLowerCase().contains('netflix')) {
-      return Container(
-        width: 40,
-        height: 40,
-        decoration: const BoxDecoration(
-          color: Color(0xFFE50914),
-          shape: BoxShape.circle,
-        ),
-        child: const Icon(
-          Icons.play_arrow,
-          color: Colors.white,
-          size: 20,
-        ),
-      );
-    } else if (widget.name.toLowerCase().contains('instagram')) {
-      return Container(
-        width: 40,
-        height: 40,
-        decoration: const BoxDecoration(
-          color: Color(0xFFE4405F),
-          shape: BoxShape.circle,
-        ),
-        child: const Icon(
-          Icons.camera_alt,
-          color: Colors.white,
-          size: 20,
-        ),
-      );
-    } else if (widget.name.toLowerCase().contains('patreon')) {
-      return Container(
-        width: 40,
-        height: 40,
-        decoration: const BoxDecoration(
-          color: Color(0xFFFF424D),
-          shape: BoxShape.circle,
-        ),
-        child: const Text(
-          'P',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    } else {
-      return Container(
-        width: 40,
-        height: 40,
-        decoration: const BoxDecoration(
-          color: Color(0xFF009792),
-          shape: BoxShape.circle,
-        ),
-        child: Text(
-          widget.name[0].toUpperCase(),
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    }
-  }
+    Widget _getAppIcon() {
+  // Generate a consistent color based on the app name
+  final nameHash = widget.name.hashCode;
+  final color = Color.fromARGB(
+    255,
+    (nameHash & 0xFF0000) >> 16,
+    (nameHash & 0x00FF00) >> 8,
+    nameHash & 0x0000FF,
+  ).withValues(alpha: 0.85);
+
+  return Container(
+    width: 40,
+    height: 40,
+    alignment: Alignment.center, // Centra la inicial
+    decoration: BoxDecoration(
+      color: color,
+      shape: BoxShape.circle,
+    ),
+    child: Text(
+      widget.name.isNotEmpty ? widget.name[0].toUpperCase() : '',
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+  );
+}
+
 
   String _formatTime(double hours) {
     if (hours >= 1) {
