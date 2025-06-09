@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../widgets/app_budget_tile.dart';
@@ -124,7 +125,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
 
     if (_isLoading) {
       return const Scaffold(
-        backgroundColor: Color(0xFFF8F9FA),
+        backgroundColor: Colors.white,
         body: Center(
           child: CircularProgressIndicator(
             color: Color(0xFF009792),
@@ -134,7 +135,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,7 +149,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                   Text(
                     loc.budgetTitle,
                     style: const TextStyle(
-                      fontSize: 32,
+                      fontSize: 25,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF1A1A1A),
                     ),
@@ -183,29 +184,32 @@ class _BudgetScreenState extends State<BudgetScreen> {
                         ),
                         IntrinsicWidth(
                           child: TextField(
-                            controller: _priceController,
-                            focusNode: _priceFocusNode,
-                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                            textInputAction: TextInputAction.done,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 48,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF1A1A1A),
+                              controller: _priceController,
+                              focusNode: _priceFocusNode,
+                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                              textInputAction: TextInputAction.done,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 48,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF1A1A1A),
+                              ),
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.zero,
+                              ),
+                              onSubmitted: _onPriceSubmitted,
+                              onEditingComplete: () {
+                                _onPriceSubmitted(_priceController.text);
+                              },
+                              onTapOutside: (event) {
+                                _onPriceSubmitted(_priceController.text);
+                                _priceFocusNode.unfocus();
+                              },
                             ),
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.zero,
-                            ),
-                            onSubmitted: _onPriceSubmitted,
-                            onEditingComplete: () {
-                              _onPriceSubmitted(_priceController.text);
-                            },
-                            onTapOutside: (event) {
-                              _onPriceSubmitted(_priceController.text);
-                              _priceFocusNode.unfocus();
-                            },
-                          ),
                         ),
                         const SizedBox(width: 8),
                         const Icon(
@@ -234,13 +238,13 @@ class _BudgetScreenState extends State<BudgetScreen> {
                           width: 32,
                           height: 32,
                           decoration: const BoxDecoration(
-                            color: Color(0xFF009792),
+                            color: Colors.white,
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(
                             Icons.add,
-                            color: Colors.white,
-                            size: 20,
+                            color: Colors.black,
+                            size: 25,
                           ),
                         ),
                       ),
