@@ -65,6 +65,32 @@ class _BudgetScreenState extends State<BudgetScreen> {
     }
   }
 
+  Future<void> _updateAppCategory(String appId, String category) async {
+    try {
+      final userId = _auth.currentUser?.uid;
+      if (userId == null) return;
+
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('categoryBudgets')
+          .doc(appId)
+          .update({'category': category});
+    } catch (e) {
+      debugPrint('Error updating app category: $e');
+      if (!mounted) return;
+      
+      final loc = AppLocalizations.of(context)!;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(loc.errorSavingData),
+          backgroundColor: Colors.red.shade400,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
   Future<void> _deleteApp(String appId, String appName) async {
     final confirmed = await _showDeleteConfirmation(appName);
     if (!confirmed) return;
@@ -570,8 +596,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
                         name: appData['name'] ?? '',
                         hours: (appData['amount'] ?? 0.0).toDouble(),
                         icon: appData['icon'],
+                        category: appData['category'],
                         onChanged: (newHours) {
                           _updateAppBudget(app.id, newHours);
+                        },
+                        onCategoryChanged: (newCategory) {
+                          _updateAppCategory(app.id, newCategory);
                         },
                         onDelete: () {
                           _deleteApp(app.id, appData['name'] ?? '');

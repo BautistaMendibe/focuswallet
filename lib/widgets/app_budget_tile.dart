@@ -4,7 +4,9 @@ class AppBudgetTile extends StatefulWidget {
   final String name;
   final double hours;
   final String? icon;
+  final String? category;
   final Function(double) onChanged;
+  final Function(String)? onCategoryChanged;
   final VoidCallback? onDelete;
 
   const AppBudgetTile({
@@ -12,7 +14,9 @@ class AppBudgetTile extends StatefulWidget {
     required this.name,
     required this.hours,
     this.icon,
+    this.category,
     required this.onChanged,
+    this.onCategoryChanged,
     this.onDelete,
   });
 
@@ -28,12 +32,36 @@ class _AppBudgetTileState extends State<AppBudgetTile> with SingleTickerProvider
   late Animation<double> _animation;
   final _valueController = TextEditingController();
   final _valueFocusNode = FocusNode();
+  final _customCategoryController = TextEditingController();
+  String _selectedCategory = 'Redes sociales';
+  bool _showCustomCategoryField = false;
+
+  final List<String> _categories = [
+    'Redes sociales',
+    'Juegos',
+    'Streaming',
+    'Casino',
+    'Mensajería',
+    'Otro'
+  ];
 
   @override
   void initState() {
     super.initState();
     _currentValue = widget.hours.clamp(0.5, 6.0); // Ensure initial value is valid
     _updateControllerText();
+    
+    // Initialize category
+    if (widget.category != null) {
+      if (_categories.contains(widget.category)) {
+        _selectedCategory = widget.category!;
+      } else {
+        _selectedCategory = 'Otro';
+        _showCustomCategoryField = true;
+        _customCategoryController.text = widget.category!;
+      }
+    }
+    
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
@@ -49,6 +77,7 @@ class _AppBudgetTileState extends State<AppBudgetTile> with SingleTickerProvider
     _animationController.dispose();
     _valueController.dispose();
     _valueFocusNode.dispose();
+    _customCategoryController.dispose();
     super.dispose();
   }
 
@@ -113,6 +142,16 @@ class _AppBudgetTileState extends State<AppBudgetTile> with SingleTickerProvider
         _animationController.reverse();
       }
     });
+  }
+
+  void _onCategoryChanged(String newCategory) {
+    if (widget.onCategoryChanged != null) {
+      String categoryToSave = newCategory;
+      if (newCategory == 'Otro' && _customCategoryController.text.isNotEmpty) {
+        categoryToSave = _customCategoryController.text;
+      }
+      widget.onCategoryChanged!(categoryToSave);
+    }
   }
 
   Widget _getAppIcon() {
@@ -238,6 +277,17 @@ class _AppBudgetTileState extends State<AppBudgetTile> with SingleTickerProvider
                           ),
                         ),
                         const SizedBox(height: 4),
+                        if (widget.category != null) ...[
+                          Text(
+                            widget.category!,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Color(0xFF009792),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                        ],
                         Text(
                           _formatTime(_currentValue),
                           style: const TextStyle(
@@ -280,6 +330,98 @@ class _AppBudgetTileState extends State<AppBudgetTile> with SingleTickerProvider
                 children: [
                   const Divider(color: Color(0xFFE5E7EB)),
                   const SizedBox(height: 16),
+                  
+                  // Category section
+                  if (widget.onCategoryChanged != null) ...[
+                    Row(
+                      children: [
+                        Text(
+                          'Categoría: ',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF1A1A1A),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: const Color(0xFFE5E7EB)),
+                              borderRadius: BorderRadius.circular(8),
+                              color: const Color(0xFFF9FAFB),
+                            ),
+                            child: DropdownButtonFormField<String>(
+                              value: _selectedCategory,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              ),
+                              dropdownColor: Colors.white,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Color(0xFF1A1A1A),
+                              ),
+                              items: _categories.map((String category) {
+                                return DropdownMenuItem<String>(
+                                  value: category,
+                                  child: Text(category),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                if (newValue != null) {
+                                  setState(() {
+                                    _selectedCategory = newValue;
+                                    _showCustomCategoryField = newValue == 'Otro';
+                                    if (!_showCustomCategoryField) {
+                                      _customCategoryController.clear();
+                                    }
+                                  });
+                                  _onCategoryChanged(newValue);
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    
+                    // Custom category field
+                    if (_showCustomCategoryField) ...[
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        controller: _customCategoryController,
+                        decoration: InputDecoration(
+                          labelText: 'Categoría personalizada',
+                          labelStyle: const TextStyle(
+                            color: Color(0xFF6B7280),
+                            fontSize: 14,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: const BorderSide(color: Color(0xFF009792), width: 2),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                          filled: true,
+                          fillColor: const Color(0xFFF9FAFB),
+                        ),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF1A1A1A),
+                        ),
+                        onChanged: (value) {
+                          if (value.isNotEmpty) {
+                            _onCategoryChanged('Otro');
+                          }
+                        },
+                      ),
+                    ],
+                    
+                    const SizedBox(height: 20),
+                  ],
                   
                   // Tab selector
                   Container(

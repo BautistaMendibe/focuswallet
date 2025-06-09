@@ -20,6 +20,16 @@ class _AddAppModalState extends State<AddAppModal> {
   final _nameController = TextEditingController();
   double _hours = 1.0;
   bool _isLoading = false;
+  String _selectedCategory = 'Redes sociales';
+
+  final List<String> _categories = [
+    'Redes sociales',
+    'Juegos',
+    'Streaming',
+    'Casino',
+    'Mensajería',
+    'Otro'
+  ];
 
   Future<void> _saveApp() async {
     if (!_formKey.currentState!.validate()) return;
@@ -39,6 +49,7 @@ class _AddAppModalState extends State<AddAppModal> {
           .add({
         'name': _nameController.text,
         'amount': _hours,
+        'category': _selectedCategory,
         'createdAt': FieldValue.serverTimestamp(),
       });
 
@@ -145,6 +156,50 @@ class _AddAppModalState extends State<AddAppModal> {
                   }
                   return null;
                 },
+              ),
+              const SizedBox(height: 24),
+
+              // Category selection
+              Text(
+                'Categoría',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF1A1A1A),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: const Color(0xFFE5E7EB)),
+                  borderRadius: BorderRadius.circular(12),
+                  color: const Color(0xFFF9FAFB),
+                ),
+                child: DropdownButtonFormField<String>(
+                  value: _selectedCategory,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  ),
+                  dropdownColor: Colors.white,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Color(0xFF1A1A1A),
+                  ),
+                  items: _categories.map((String category) {
+                    return DropdownMenuItem<String>(
+                      value: category,
+                      child: Text(category),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    if (newValue != null) {
+                      setState(() {
+                        _selectedCategory = newValue;
+                      });
+                    }
+                  },
+                ),
               ),
               const SizedBox(height: 24),
               
