@@ -5,6 +5,7 @@ class AppBudgetTile extends StatefulWidget {
   final double hours;
   final String? icon;
   final Function(double) onChanged;
+  final VoidCallback? onDelete;
 
   const AppBudgetTile({
     super.key,
@@ -12,6 +13,7 @@ class AppBudgetTile extends StatefulWidget {
     required this.hours,
     this.icon,
     required this.onChanged,
+    this.onDelete,
   });
 
   @override
@@ -246,6 +248,20 @@ class _AppBudgetTileState extends State<AppBudgetTile> with SingleTickerProvider
                       ],
                     ),
                   ),
+                  // Delete button
+                  if (widget.onDelete != null)
+                    GestureDetector(
+                      onTap: widget.onDelete,
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        child: Icon(
+                          Icons.delete_outline,
+                          color: Colors.red.shade600,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  const SizedBox(width: 8),
                   Icon(
                     _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
                     color: const Color(0xFF6B7280),

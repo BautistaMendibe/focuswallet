@@ -65,6 +65,99 @@ class _BudgetScreenState extends State<BudgetScreen> {
     }
   }
 
+  Future<void> _deleteApp(String appId, String appName) async {
+    final confirmed = await _showDeleteConfirmation(appName);
+    if (!confirmed) return;
+
+    try {
+      final userId = _auth.currentUser?.uid;
+      if (userId == null) return;
+
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('categoryBudgets')
+          .doc(appId)
+          .delete();
+    } catch (e) {
+      debugPrint('Error deleting app: $e');
+      if (!mounted) return;
+      
+      final loc = AppLocalizations.of(context)!;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(loc.errorSavingData),
+          backgroundColor: Colors.red.shade400,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
+  Future<bool> _showDeleteConfirmation(String appName) async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Text(
+            'Eliminar aplicación',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '¿Estás seguro de que quieres eliminar "$appName" de tu presupuesto de tiempo?',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+            
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(
+                'Cancelar',
+                style: TextStyle(
+                  color: Colors.grey.shade600,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context, true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red.shade600,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                'Eliminar',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    ) ?? false;
+  }
+
   Future<void> _updatePricePerHour(double newPrice) async {
     try {
       final userId = _auth.currentUser?.uid;
@@ -147,7 +240,6 @@ class _BudgetScreenState extends State<BudgetScreen> {
                 'Este precio será el que luego tendrás que abonar para comprar más tiempo de uso',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.grey.shade600,
                 ),
               ),
               const SizedBox(height: 16),
@@ -164,14 +256,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       'Precio anterior:',
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.grey.shade600,
                       ),
                     ),
                     Text(
                       '\$${_pricePerHour.toStringAsFixed(0)}',
                       style: const TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],
@@ -482,6 +572,9 @@ class _BudgetScreenState extends State<BudgetScreen> {
                         icon: appData['icon'],
                         onChanged: (newHours) {
                           _updateAppBudget(app.id, newHours);
+                        },
+                        onDelete: () {
+                          _deleteApp(app.id, appData['name'] ?? '');
                         },
                       );
                     },
