@@ -18,9 +18,12 @@ class AddAppModal extends StatefulWidget {
 class _AddAppModalState extends State<AddAppModal> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
+  final _valueController = TextEditingController();
+  final _valueFocusNode = FocusNode();
   double _hours = 1.0;
   bool _isLoading = false;
   String _selectedCategory = 'Redes sociales';
+  int _selectedTab = 1; // 0 for minutes, 1 for hours
 
   final List<String> _categories = [
     'Redes sociales',
@@ -30,6 +33,61 @@ class _AddAppModalState extends State<AddAppModal> {
     'Mensajería',
     'Otro'
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _updateControllerText();
+  }
+
+  @override
+  void dispose() {
+    _valueController.dispose();
+    _valueFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _updateControllerText() {
+    if (_selectedTab == 0) {
+      _valueController.text = (_hours * 60).round().toString();
+    } else {
+      _valueController.text = _hours.toStringAsFixed(1);
+    }
+  }
+
+  void _onValueSubmitted(String value) {
+    double newValue;
+    if (_selectedTab == 0) {
+      // Minutes tab
+      final minutes = int.tryParse(value);
+      if (minutes != null && minutes >= 30 && minutes <= 360) { // Min 30 minutes (0.5 hours)
+        newValue = minutes / 60.0;
+      } else {
+        _updateControllerText();
+        _valueFocusNode.unfocus();
+        return;
+      }
+    } else {
+      // Hours tab
+      final hours = double.tryParse(value);
+      if (hours != null && hours >= 0.5 && hours <= 6.0) {
+        newValue = hours;
+      } else {
+        _updateControllerText();
+        _valueFocusNode.unfocus();
+        return;
+      }
+    }
+    
+    // Ensure value is within slider range
+    newValue = newValue.clamp(0.5, 6.0);
+    
+    setState(() {
+      _hours = newValue;
+      _updateControllerText(); // Update controller with clamped value
+    });
+    _valueFocusNode.unfocus();
+  }
 
   Future<void> _saveApp() async {
     if (!_formKey.currentState!.validate()) return;
@@ -205,7 +263,7 @@ class _AddAppModalState extends State<AddAppModal> {
               
               // Hours selection
               Text(
-                '${loc.hoursPerDay}: ${_hours.toStringAsFixed(1)} horas',
+                loc.hoursPerDay,
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -215,50 +273,186 @@ class _AddAppModalState extends State<AddAppModal> {
               ),
               const SizedBox(height: 16),
               
-              SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                  activeTrackColor: const Color(0xFF009792),
-                  inactiveTrackColor: const Color(0xFFE5E7EB),
-                  thumbColor: const Color(0xFF009792),
-                  overlayColor: const Color(0xFF009792).withValues(alpha: 0.2),
-                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
-                  trackHeight: 4,
+              // Tab selector
+              Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF3F4F6),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                child: Slider(
-                  value: _hours,
-                  min: 0.5,
-                  max: 6.0,
-                  divisions: 11,
-                  onChanged: (value) {
-                    setState(() {
-                      _hours = value;
-                    });
-                  },
-                ),
-              ),
-              
-              // Min/Max labels
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      '0.5h',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF6B7280),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedTab = 0;
+                            _updateControllerText();
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          decoration: BoxDecoration(
+                            color: _selectedTab == 0 ? Colors.white : Colors.transparent,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: _selectedTab == 0 ? [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.1),
+                                blurRadius: 2,
+                                offset: const Offset(0, 1),
+                              ),
+                            ] : [],
+                          ),
+                          child: Text(
+                            'Minutos',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: _selectedTab == 0 ? const Color(0xFF1A1A1A) : const Color(0xFF6B7280),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                    Text(
-                      '6h',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF6B7280),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedTab = 1;
+                            _updateControllerText();
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          decoration: BoxDecoration(
+                            color: _selectedTab == 1 ? Colors.white : Colors.transparent,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: _selectedTab == 1 ? [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.1),
+                                blurRadius: 2,
+                                offset: const Offset(0, 1),
+                              ),
+                            ] : [],
+                          ),
+                          child: Text(
+                            'Horas',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: _selectedTab == 1 ? const Color(0xFF1A1A1A) : const Color(0xFF6B7280),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ],
                 ),
+              ),
+              
+              const SizedBox(height: 24),
+              
+              // Value display - editable
+              GestureDetector(
+                onTap: () {
+                  _valueController.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: _valueController.text.length,
+                  );
+                  _valueFocusNode.requestFocus();
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IntrinsicWidth(
+                      child: TextField(
+                        controller: _valueController,
+                        focusNode: _valueFocusNode,
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        textInputAction: TextInputAction.done,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF1A1A1A),
+                        ),
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                        onSubmitted: _onValueSubmitted,
+                        onEditingComplete: () {
+                          _onValueSubmitted(_valueController.text);
+                        },
+                        onTapOutside: (event) {
+                          _onValueSubmitted(_valueController.text);
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      _selectedTab == 0 ? 'minutos' : 'horas',
+                      style: const TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1A1A1A),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    const Icon(
+                      Icons.edit,
+                      color: Color(0xFF009792),
+                      size: 20,
+                    ),
+                  ],
+                ),
+              ),
+              
+              const SizedBox(height: 20),
+              
+              // Slider
+              Row(
+                children: [
+                  Text(
+                    _selectedTab == 0 ? '30' : '0.5',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF6B7280),
+                    ),
+                  ),
+                  Expanded(
+                    child: SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        activeTrackColor: const Color(0xFF009792),
+                        inactiveTrackColor: const Color(0xFFE5E7EB),
+                        thumbColor: const Color(0xFF009792),
+                        overlayColor: const Color(0xFF009792).withValues(alpha: 0.2),
+                        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
+                        trackHeight: 4,
+                      ),
+                      child: Slider(
+                        value: _hours.clamp(0.5, 6.0),
+                        min: 0.5,
+                        max: 6.0,
+                        divisions: 11,
+                        onChanged: (value) {
+                          setState(() {
+                            _hours = value;
+                            _updateControllerText();
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  Text(
+                    _selectedTab == 0 ? '360' : '6',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF6B7280),
+                    ),
+                  ),
+                ],
               ),
               
               const SizedBox(height: 32),
