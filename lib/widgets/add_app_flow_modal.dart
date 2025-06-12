@@ -349,13 +349,9 @@ class AppSelectionStep extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Icono de la app con color de fondo
-              Container(
+              SizedBox(
                 width: 48,
                 height: 48,
-                decoration: BoxDecoration(
-                  color: app.color.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
                 child: app.pngPath != null
                     ? Padding(
                         padding: const EdgeInsets.all(8.0),
