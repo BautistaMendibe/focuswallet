@@ -393,68 +393,74 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       color: Color(0xFF1A1A1A),
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  Text(
-                    loc.pricePerHour,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Color(0xFF6B7280),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  GestureDetector(
-                    onTap: () {
-                      _priceController.selection = TextSelection(
-                        baseOffset: 0,
-                        extentOffset: _priceController.text.length,
-                      );
-                      _priceFocusNode.requestFocus();
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
+                  const SizedBox(height: 20),
+                  Center(
+                    child: Column(
                       children: [
                         Text(
-                          '\$',
+                          loc.pricePerHour,
                           style: const TextStyle(
-                            fontSize: 48,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF1A1A1A),
+                            fontSize: 16,
+                            color: Color(0xFF6B7280),
                           ),
                         ),
-                        IntrinsicWidth(
-                          child: TextField(
-                              controller: _priceController,
-                              focusNode: _priceFocusNode,
-                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly,
-                              ],
-                              textInputAction: TextInputAction.done,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 48,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF1A1A1A),
+                        const SizedBox(height: 8),
+                        GestureDetector(
+                          onTap: () {
+                            _priceController.selection = TextSelection(
+                              baseOffset: 0,
+                              extentOffset: _priceController.text.length,
+                            );
+                            _priceFocusNode.requestFocus();
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                '\$',
+                                style: const TextStyle(
+                                  fontSize: 48,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF1A1A1A),
+                                ),
                               ),
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.zero,
+                              IntrinsicWidth(
+                                child: TextField(
+                                    controller: _priceController,
+                                    focusNode: _priceFocusNode,
+                                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                    ],
+                                    textInputAction: TextInputAction.done,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontSize: 48,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF1A1A1A),
+                                    ),
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      contentPadding: EdgeInsets.zero,
+                                    ),
+                                    onSubmitted: _onPriceSubmitted,
+                                    onEditingComplete: () {
+                                      _onPriceSubmitted(_priceController.text);
+                                    },
+                                    onTapOutside: (event) {
+                                      _onPriceSubmitted(_priceController.text);
+                                      _priceFocusNode.unfocus();
+                                    },
+                                  ),
                               ),
-                              onSubmitted: _onPriceSubmitted,
-                              onEditingComplete: () {
-                                _onPriceSubmitted(_priceController.text);
-                              },
-                              onTapOutside: (event) {
-                                _onPriceSubmitted(_priceController.text);
-                                _priceFocusNode.unfocus();
-                              },
-                            ),
-                        ),
-                        const SizedBox(width: 8),
-                        const Icon(
-                          Icons.edit,
-                          color: Color(0xFF009792),
-                          size: 20,
+                              const SizedBox(width: 8),
+                              const Icon(
+                                Icons.edit,
+                                color: Color(0xFF009792),
+                                size: 20,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -466,7 +472,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       Text(
                         'Distribuir horas por app',
                         style: const TextStyle(
-                          fontSize: 20,
+                          fontSize: 21,
                           fontWeight: FontWeight.w600,
                           color: Color(0xFF1A1A1A),
                         ),
@@ -474,8 +480,8 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       GestureDetector(
                         onTap: _showAddAppModal,
                         child: Container(
-                          width: 32,
-                          height: 32,
+                          width: 35,
+                          height: 35,
                           decoration: const BoxDecoration(
                             color: Colors.white,
                             shape: BoxShape.circle,
@@ -483,7 +489,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                           child: const Icon(
                             Icons.add,
                             color: Colors.black,
-                            size: 25,
+                            size: 30,
                           ),
                         ),
                       ),
