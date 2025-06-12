@@ -2,43 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:focuswallet/components/budget_summary.dart';
 import 'package:focuswallet/components/today_use_card.dart';
 import 'package:focuswallet/services/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
-  String _getUserDisplayName() {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return '';
-    if (user.displayName != null) return user.displayName!;
-    // Extract name from email (everything before @)
-    return user.email?.split('@')[0] ?? '';
-  }
-
   @override
   Widget build(BuildContext context) {
     final authService = AuthService();
-    final displayName = _getUserDisplayName();
-    final loc = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: Colors.white,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        selectedItemColor: Colors.teal,
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today), label: 'Today'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.dashboard), label: 'Overview'),
-          BottomNavigationBarItem(icon: Icon(Icons.wallet), label: 'Budget'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Setting'),
-        ],
-      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -53,17 +27,11 @@ class DashboardScreen extends StatelessWidget {
                       authService.logout();
                       Navigator.pushReplacementNamed(context, '/login');
                     },
-                    child: const CircleAvatar(
-                        radius: 24,
-                        child: Text(
-                          '👨🏼',
-                          style: TextStyle(fontSize: 25),
-                        )),
+                    child: const Text(
+                      'Time Wallet',
+                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
                   ),
-                  const SizedBox(width: 12),
-                  Text("${loc.hello},\n$displayName!",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const Spacer(),
                   Row(
                     children: const [

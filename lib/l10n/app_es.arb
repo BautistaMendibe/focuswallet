@@ -5,7 +5,7 @@
   "onboarding1Title": "Gasta tu tiempo como dinero",
   "onboarding1Subtitle": "Cada día tenés un presupuesto de $2 dólares virtuales. Usar tu celular cuesta: cada hora equivale a $1 dólar. ¡Elegí cómo lo gastás!",
   "onboarding2Title": "Cada app tiene su propio presupuesto",
-  "onboarding2Subtitle": "Instagram, TikTok, Netflix… asigná cuánto estás dispuesto a “gastar” por cada una. Controlá el uso y evitá los excesos sin darte cuenta.",
+  "onboarding2Subtitle": "Instagram, TikTok, Netflix… asigná cuánto estás dispuesto a gastar por cada una. Controlá el uso y evitá los excesos sin darte cuenta.",
   "onboarding3Title": "Tomá el control de tu atención",
   "onboarding3Subtitle": "El único método comprobado para dejar de usar tanto el celular. Tu atención, tu libertad.",
   "createAccount": "Crear una cuenta",
@@ -34,5 +34,21 @@
   "auth_weak_password": "La contraseña es demasiado débil (mínimo 6 caracteres).",
   "auth_register_default_error": "Ocurrió un error inesperado. Intenta nuevamente.",
 
-  "hello": "Hola"
+  "hello": "Hola",
+
+  "budgetTitle": "Presupuesto de tiempo",
+  "pricePerHour": "Valor por hora",
+  "totalHoursPerDay": "Total de horas por día",
+  "errorLoadingData": "Error al cargar los datos",
+  "errorSavingData": "Error al guardar los datos",
+  "addNewApp": "Agregar nueva app",
+  "appName": "Nombre de la app",
+  "requiredField": "Este campo es requerido",
+  "hoursPerDay": "Horas por día",
+  "save": "Guardar",
+
+  "navDashboard": "Inicio",
+  "navSummary": "Resumen",
+  "navBudget": "Presupuesto",
+  "navSettings": "Ajustes"
 }

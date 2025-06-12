@@ -5,7 +5,7 @@
   "onboarding1Title": "Spend your time like money",
   "onboarding1Subtitle": "Each day you have a $2 virtual budget. Using your phone costs money: each hour equals $1. Choose how to spend it!",
   "onboarding2Title": "Each app has its own budget",
-  "onboarding2Subtitle": "Instagram, TikTok, Netflix... assign how much you're willing to 'spend' on each. Control your usage and avoid unconscious excess.",
+  "onboarding2Subtitle": "Instagram, TikTok, Netflix... assign how much you're willing to spend on each. Control your usage and avoid unconscious excess.",
   "onboarding3Title": "Take control of your attention",
   "onboarding3Subtitle": "The only proven method to stop overusing your phone. Your attention, your freedom.",
   "createAccount": "Create an account",
@@ -34,5 +34,21 @@
   "auth_weak_password": "The password is too weak (minimum 6 characters).",
   "auth_register_default_error": "An unexpected error occurred. Please try again.",
 
-  "hello": "Hello"
+  "hello": "Hello",
+
+  "budgetTitle": "Time Budget",
+  "pricePerHour": "Value per hour",
+  "totalHoursPerDay": "Total hours per day",
+  "errorLoadingData": "Error loading data",
+  "errorSavingData": "Error saving data",
+  "addNewApp": "Add new app",
+  "appName": "App name",
+  "requiredField": "This field is required",
+  "hoursPerDay": "Hours per day",
+  "save": "Save",
+
+  "navDashboard": "Home",
+  "navSummary": "Summary",
+  "navBudget": "Budget",
+  "navSettings": "Settings"
 }

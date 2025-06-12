@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -19,11 +20,56 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool _obscurePass = true;
   bool _obscureConfirmPass = true;
+  bool _isLoading = false;
+
+  Future<void> _initializeUserDefaults(String userId) async {
+    final firestore = FirebaseFirestore.instance;
+
+    try {
+      //print('Inicializando settings...');
+      await firestore.collection('users').doc(userId).set({
+        'settings': {
+          'pricePerHour': 2.0,
+          'dailyBudget': 2.0,
+        }
+      });
+      //print('Settings guardados correctamente.');
+    } catch (e) {
+      //print('Error al guardar settings: $e');
+      rethrow;
+    }
+
+    try {
+      //print('Inicializando categoryBudgets...');
+      final categoryBudgetsRef = firestore.collection('users').doc(userId).collection('categoryBudgets');
+
+      await Future.wait([
+        categoryBudgetsRef.doc('social_media').set({
+          'name': 'Redes sociales',
+          'amount': 1.0,
+        }),
+        categoryBudgetsRef.doc('streaming').set({
+          'name': 'Streaming',
+          'amount': 0.5,
+        }),
+        categoryBudgetsRef.doc('juegos').set({
+          'name': 'Juegos',
+          'amount': 0.5,
+        }),
+      ]);
+      //print('CategoryBudgets guardados correctamente.');
+    } catch (e) {
+      //print('Error al guardar categoryBudgets: $e');
+      rethrow;
+    }
+}
+
 
   void register() async {
     final loc = AppLocalizations.of(context)!;
 
     if (passCtrl.text != confirmPassCtrl.text) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(loc.passwordsDoNotMatch),
@@ -33,12 +79,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
 
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       final user = await _authService.register(emailCtrl.text, passCtrl.text);
       if (!mounted) return;
 
       if (user != null) {
-        Navigator.pushReplacementNamed(context, '/dashboard');
+        await _initializeUserDefaults(user.uid);
+        if (!mounted) return;
+        Navigator.pushReplacementNamed(context, '/main');
       }
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
@@ -66,6 +118,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           margin: const EdgeInsets.all(16),
         ),
       );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -150,17 +208,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: register,
+                    onPressed: _isLoading ? null : register,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF009792),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: Text(
-                      loc.registerButton,
-                      style: const TextStyle(fontSize: 16, color: Colors.white),
-                    ),
+                    child: _isLoading
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : Text(
+                            loc.registerButton,
+                            style: const TextStyle(fontSize: 16, color: Colors.white),
+                          ),
                   ),
                 ),
                 const SizedBox(height: 16),
