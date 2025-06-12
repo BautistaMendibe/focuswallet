@@ -197,18 +197,14 @@ class _AppBudgetTileState extends State<AppBudgetTile> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade200),
-        
+      decoration: const BoxDecoration(
+        color: Colors.transparent,
       ),
       child: Column(
         children: [
           // Main tile content
           InkWell(
             onTap: _toggleExpanded,
-            borderRadius: BorderRadius.circular(16),
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Row(

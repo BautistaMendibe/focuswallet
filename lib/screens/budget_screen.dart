@@ -525,7 +525,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
             const SizedBox(height: 24),
 
             // Apps List
-            Expanded(
+            Flexible(
               child: StreamBuilder<QuerySnapshot>(
                 stream: _firestore
                     .collection('users')
@@ -584,34 +584,52 @@ class _BudgetScreenState extends State<BudgetScreen> {
                     );
                   }
 
-                  return ListView.separated(
+                  return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    itemCount: apps.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 16),
-                    itemBuilder: (context, index) {
-                      final app = apps[index];
-                      final appData = app.data() as Map<String, dynamic>;
-                      
-                      return AppBudgetTile(
-                        name: appData['name'] ?? '',
-                        hours: (appData['amount'] ?? 0.0).toDouble(),
-                        icon: appData['icon'],
-                        category: appData['category'],
-                        onChanged: (newHours) {
-                          _updateAppBudget(app.id, newHours);
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.grey.shade200),
+                      ),
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                        itemCount: apps.length,
+                        separatorBuilder: (context, index) => Divider(
+                          height: 1,
+                          color: Colors.grey.shade200,
+                          indent: 20,
+                          endIndent: 20,
+                        ),
+                        itemBuilder: (context, index) {
+                          final app = apps[index];
+                          final appData = app.data() as Map<String, dynamic>;
+                          
+                          return AppBudgetTile(
+                            name: appData['name'] ?? '',
+                            hours: (appData['amount'] ?? 0.0).toDouble(),
+                            icon: appData['icon'],
+                            category: appData['category'],
+                            onChanged: (newHours) {
+                              _updateAppBudget(app.id, newHours);
+                            },
+                            onCategoryChanged: (newCategory) {
+                              _updateAppCategory(app.id, newCategory);
+                            },
+                            onDelete: () {
+                              _deleteApp(app.id, appData['name'] ?? '');
+                            },
+                          );
                         },
-                        onCategoryChanged: (newCategory) {
-                          _updateAppCategory(app.id, newCategory);
-                        },
-                        onDelete: () {
-                          _deleteApp(app.id, appData['name'] ?? '');
-                        },
-                      );
-                    },
+                      ),
+                    ),
                   );
                 },
               ),
             ),
+            const SizedBox(height: 24),
           ],
         ),
       ),
