@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../widgets/app_budget_tile.dart';
-import '../widgets/add_app_modal.dart';
+import '../widgets/add_app_flow_modal.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BudgetScreen extends StatefulWidget {
@@ -220,7 +220,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => AddAppModal(
+      builder: (context) => AddAppFlowModal(
         onAppAdded: () {
           setState(() {});
         },
