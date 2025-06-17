@@ -233,12 +233,12 @@ class AppSelectionStep extends StatelessWidget {
       PredefinedApp(name: 'LinkedIn', category: 'Redes sociales', svgPath: 'assets/apps-icons/social-media/linkedin.svg', color: Color(0xFF0A66C2)),
     ],
     'Streaming': [
-      PredefinedApp(name: 'Netflix', category: 'Streaming', fallbackIcon: Icons.movie, color: Color(0xFFE50914)),
-      PredefinedApp(name: 'YouTube', category: 'Streaming', fallbackIcon: Icons.play_circle, color: Color(0xFFFF0000)),
-      PredefinedApp(name: 'Spotify', category: 'Streaming', fallbackIcon: Icons.music_video, color: Color(0xFF1DB954)),
-      PredefinedApp(name: 'Disney+', category: 'Streaming', fallbackIcon: Icons.star, color: Color(0xFF113CCF)),
-      PredefinedApp(name: 'Prime Video', category: 'Streaming', fallbackIcon: Icons.video_library, color: Color(0xFF00A8E1)),
-      PredefinedApp(name: 'Twitch', category: 'Streaming', fallbackIcon: Icons.videogame_asset, color: Color(0xFF9146FF)),
+      PredefinedApp(name: 'YouTube', category: 'Streaming', pngPath: 'assets/apps-icons/streaming/youtube.png', color: Color(0xFFFF0000)),
+      PredefinedApp(name: 'Netflix', category: 'Streaming', pngPath: 'assets/apps-icons/streaming/netflix.png', color: Color(0xFFE50914)),
+      PredefinedApp(name: 'Spotify', category: 'Streaming', svgPath: 'assets/apps-icons/streaming/spotify.svg', color: Color(0xFF1DB954)),
+      PredefinedApp(name: 'Disney+', category: 'Streaming', pngPath: 'assets/apps-icons/streaming/disneyplus.png', color: Color(0xFF113CCF)),
+      PredefinedApp(name: 'Prime Video', category: 'Streaming', pngPath: 'assets/apps-icons/streaming/prime-video.png', color: Color(0xFF00A8E1)),
+      PredefinedApp(name: 'Twitch', category: 'Streaming', pngPath: 'assets/apps-icons/streaming/twitch.png', color: Color(0xFF9146FF)),
     ],
     'Juegos': [
       PredefinedApp(name: 'PUBG Mobile', category: 'Juegos', fallbackIcon: Icons.sports_esports, color: Color(0xFFFF6900)),
