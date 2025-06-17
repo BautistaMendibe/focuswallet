@@ -74,6 +74,7 @@ flutter:
     - assets/apps-icons/
     - assets/apps-icons/social-media/
     - assets/apps-icons/streaming/
+    - assets/apps-icons/mensajeria/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

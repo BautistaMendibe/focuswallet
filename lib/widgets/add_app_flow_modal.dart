@@ -249,11 +249,10 @@ class AppSelectionStep extends StatelessWidget {
       PredefinedApp(name: 'Minecraft', category: 'Juegos', fallbackIcon: Icons.view_module, color: Color(0xFF00AA00)),
     ],
     'Mensajería': [
-      PredefinedApp(name: 'WhatsApp', category: 'Mensajería', fallbackIcon: Icons.chat, color: Color(0xFF25D366)),
-      PredefinedApp(name: 'Telegram', category: 'Mensajería', fallbackIcon: Icons.send, color: Color(0xFF0088CC)),
-      PredefinedApp(name: 'Discord', category: 'Mensajería', fallbackIcon: Icons.forum, color: Color(0xFF5865F2)),
-      PredefinedApp(name: 'Messenger', category: 'Mensajería', fallbackIcon: Icons.message, color: Color(0xFF0078FF)),
-      PredefinedApp(name: 'Signal', category: 'Mensajería', fallbackIcon: Icons.security, color: Color(0xFF3A76F0)),
+      PredefinedApp(name: 'WhatsApp', category: 'Mensajeria', pngPath: 'assets/apps-icons/mensajeria/whatsapp.png', fallbackIcon: Icons.chat, color: Color(0xFF25D366)),
+      PredefinedApp(name: 'Telegram', category: 'Mensajeria', pngPath: 'assets/apps-icons/mensajeria/telegram.png', fallbackIcon: Icons.send, color: Color(0xFF0088CC)),
+      PredefinedApp(name: 'Discord', category: 'Mensajeria', pngPath: 'assets/apps-icons/mensajeria/discord.png', fallbackIcon: Icons.forum, color: Color(0xFF5865F2)),
+      PredefinedApp(name: 'Messenger', category: 'Mensajeria', pngPath: 'assets/apps-icons/mensajeria/messeger.png', fallbackIcon: Icons.message, color: Color(0xFF0078FF)),
     ],
     'Casino': [
       PredefinedApp(name: 'PokerStars', category: 'Casino', fallbackIcon: Icons.casino, color: Color(0xFFFF0000)),
