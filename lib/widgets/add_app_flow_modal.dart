@@ -228,25 +228,40 @@ class AppSelectionStep extends StatelessWidget {
         pngPath: 'assets/apps-icons/social-media/snapchat.png',
         color: Color(0xFFFFFC00),
       ),
-      PredefinedApp(name: 'TikTok', category: 'Redes sociales', svgPath: 'assets/apps-icons/social-media/tiktok.svg', color: Color(0xFF000000)),
-      PredefinedApp(name: 'Twitter', category: 'Redes sociales', svgPath: 'assets/apps-icons/social-media/twitter.svg', color: Color(0xFF1DA1F2)),
-      PredefinedApp(name: 'LinkedIn', category: 'Redes sociales', svgPath: 'assets/apps-icons/social-media/linkedin.svg', color: Color(0xFF0A66C2)),
+      PredefinedApp(
+        name: 'TikTok',
+        category: 'Redes sociales',
+        pngPath: 'assets/apps-icons/social-media/tiktok.png',
+        color: Color(0xFF000000)
+      ),
+      PredefinedApp(
+        name: 'Twitter',
+        category: 'Redes sociales',
+        pngPath: 'assets/apps-icons/social-media/twitter.png',
+        color: Color(0xFF1DA1F2)
+      ),
+      PredefinedApp(
+        name: 'LinkedIn',
+        category: 'Redes sociales',
+        pngPath: 'assets/apps-icons/social-media/linkedin.png',
+        color: Color(0xFF0A66C2)
+      ),
     ],
     'Streaming': [
       PredefinedApp(name: 'YouTube', category: 'Streaming', pngPath: 'assets/apps-icons/streaming/youtube.png', color: Color(0xFFFF0000)),
       PredefinedApp(name: 'Netflix', category: 'Streaming', pngPath: 'assets/apps-icons/streaming/netflix.png', color: Color(0xFFE50914)),
-      PredefinedApp(name: 'Spotify', category: 'Streaming', svgPath: 'assets/apps-icons/streaming/spotify.svg', color: Color(0xFF1DB954)),
+      PredefinedApp(name: 'Spotify', category: 'Streaming', pngPath: 'assets/apps-icons/streaming/spotify.png', color: Color(0xFF1DB954)),
       PredefinedApp(name: 'Disney+', category: 'Streaming', pngPath: 'assets/apps-icons/streaming/disneyplus.png', color: Color(0xFF113CCF)),
       PredefinedApp(name: 'Prime Video', category: 'Streaming', pngPath: 'assets/apps-icons/streaming/prime-video.png', color: Color(0xFF00A8E1)),
       PredefinedApp(name: 'Twitch', category: 'Streaming', pngPath: 'assets/apps-icons/streaming/twitch.png', color: Color(0xFF9146FF)),
     ],
     'Juegos': [
-      PredefinedApp(name: 'PUBG Mobile', category: 'Juegos', fallbackIcon: Icons.sports_esports, color: Color(0xFFFF6900)),
-      PredefinedApp(name: 'Call of Duty', category: 'Juegos', fallbackIcon: Icons.gps_fixed, color: Color(0xFF000000)),
-      PredefinedApp(name: 'Clash Royale', category: 'Juegos', fallbackIcon: Icons.castle, color: Color(0xFF3CDCF0)),
-      PredefinedApp(name: 'Among Us', category: 'Juegos', fallbackIcon: Icons.person, color: Color(0xFFFF0000)),
-      PredefinedApp(name: 'Candy Crush', category: 'Juegos', fallbackIcon: Icons.extension, color: Color(0xFFFF69B4)),
-      PredefinedApp(name: 'Minecraft', category: 'Juegos', fallbackIcon: Icons.view_module, color: Color(0xFF00AA00)),
+      PredefinedApp(name: 'PUBG Mobile', category: 'Juegos', pngPath: 'assets/apps-icons/juegos/pubg.png', fallbackIcon: Icons.sports_esports, color: Color(0xFFFF6900)),
+      PredefinedApp(name: 'Call of Duty', category: 'Juegos', pngPath: 'assets/apps-icons/juegos/cod.png', fallbackIcon: Icons.gps_fixed, color: Color(0xFF000000)),
+      PredefinedApp(name: 'Clash Royale', category: 'Juegos', pngPath: 'assets/apps-icons/juegos/clash.png', fallbackIcon: Icons.castle, color: Color(0xFF3CDCF0)),
+      PredefinedApp(name: 'Among Us', category: 'Juegos', pngPath: 'assets/apps-icons/juegos/amongus.png', fallbackIcon: Icons.person, color: Color(0xFFFF0000)),
+      PredefinedApp(name: 'Candy Crush', category: 'Juegos', pngPath: 'assets/apps-icons/juegos/candycrush.png', fallbackIcon: Icons.extension, color: Color(0xFFFF69B4)),
+      PredefinedApp(name: 'Minecraft', category: 'Juegos', pngPath: 'assets/apps-icons/juegos/minecraft.png', fallbackIcon: Icons.view_module, color: Color(0xFF00AA00)),
     ],
     'Mensajería': [
       PredefinedApp(name: 'WhatsApp', category: 'Mensajeria', pngPath: 'assets/apps-icons/mensajeria/whatsapp.png', fallbackIcon: Icons.chat, color: Color(0xFF25D366)),
@@ -255,10 +270,10 @@ class AppSelectionStep extends StatelessWidget {
       PredefinedApp(name: 'Messenger', category: 'Mensajeria', pngPath: 'assets/apps-icons/mensajeria/messeger.png', fallbackIcon: Icons.message, color: Color(0xFF0078FF)),
     ],
     'Casino': [
-      PredefinedApp(name: 'PokerStars', category: 'Casino', fallbackIcon: Icons.casino, color: Color(0xFFFF0000)),
-      PredefinedApp(name: 'Bet365', category: 'Casino', fallbackIcon: Icons.sports_soccer, color: Color(0xFF00A651)),
-      PredefinedApp(name: 'Codere', category: 'Casino', fallbackIcon: Icons.diamond, color: Color(0xFFFFD700)),
-      PredefinedApp(name: 'Spin Palace', category: 'Casino', fallbackIcon: Icons.refresh, color: Color(0xFF800080)),
+      PredefinedApp(name: 'PokerStars', category: 'Casino', pngPath: 'assets/apps-icons/casino/pokerstars.png', fallbackIcon: Icons.casino, color: Color(0xFFFF0000)),
+      PredefinedApp(name: 'Bet365', category: 'Casino', pngPath: 'assets/apps-icons/casino/bet365.png', fallbackIcon: Icons.sports_soccer, color: Color(0xFF00A651)),
+      PredefinedApp(name: 'Codere', category: 'Casino', pngPath: 'assets/apps-icons/casino/codere.png', fallbackIcon: Icons.diamond, color: Color(0xFFFFD700)),
+      PredefinedApp(name: 'Spin Palace', category: 'Casino', pngPath: 'assets/apps-icons/casino/spinpalace.png', fallbackIcon: Icons.refresh, color: Color(0xFF800080)),
     ],
   };
 
